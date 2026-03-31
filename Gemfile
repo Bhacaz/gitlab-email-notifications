@@ -38,6 +38,10 @@ gem 'bootsnap', require: false
 
 gem 'ar_lazy_preload'
 
+# OmniAuth for GitLab OAuth
+gem 'omniauth-gitlab', require: 'omniauth/strategies/gitlab'
+gem 'omniauth-rails_csrf_protection'
+
 gem 'solid_queue_dashboard'
 
 group :production do

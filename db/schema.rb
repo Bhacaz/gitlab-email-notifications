@@ -10,5 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_19_165739) do
+  create_table "users", force: :cascade do |t|
+    t.string "avatar_url"
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "email_prefix", null: false
+    t.string "name"
+    t.string "uid"
+    t.datetime "updated_at", null: false
+    t.string "username"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email_prefix"], name: "index_users_on_email_prefix", unique: true
+    t.index ["uid"], name: "index_users_on_uid", unique: true
+  end
 end
