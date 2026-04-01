@@ -1,5 +1,9 @@
 # GitlabEmailNotifications
 
+Attempt to create the Notification center that GitLab doesn't have. https://gitlab.com/gitlab-org/gitlab/-/work_items/14889
+
+By ingesting email GitLab notifications.
+
 ## GitLab OAuth Application
 
 Go to https://gitlab.com/-/profile/applications and create a new application with the following settings:
