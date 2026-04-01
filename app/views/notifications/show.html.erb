@@ -1,0 +1,74 @@
+<%= content_for :title, @notification.title %>
+
+<div class="w-full max-w-4xl mx-auto">
+  <%# Back link %>
+  <div class="mb-4">
+    <%= link_to root_path, class: "btn btn-ghost btn-sm" do %>
+      <i class="bi bi-arrow-left"></i> Back
+    <% end %>
+  </div>
+
+  <%# Header card %>
+  <div class="card bg-base-200 mb-4">
+    <div class="card-body gap-2 py-4">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h1 class="text-lg font-bold leading-snug">
+            <% if @notification.link.present? %>
+              <a href="<%= @notification.link %>" target="_blank" rel="noopener noreferrer"
+                 class="link link-primary">
+                <%= @notification.title %>
+                <i class="bi bi-box-arrow-up-right text-sm opacity-60"></i>
+              </a>
+            <% else %>
+              <%= @notification.title %>
+            <% end %>
+          </h1>
+
+          <div class="flex flex-wrap items-center gap-2 mt-2">
+            <% if @notification.repo.present? %>
+              <span class="badge badge-ghost badge-sm">
+                <i class="bi bi-git mr-1"></i><%= @notification.repo %>
+              </span>
+            <% end %>
+            <% if @notification.reason_pipeline_failed? %>
+              <span class="badge badge-error badge-sm">Pipeline failed</span>
+            <% end %>
+            <span class="text-xs text-base-content/40">
+              <%= @notification.created_at.strftime("%b %-d, %Y at %H:%M") %>
+            </span>
+          </div>
+
+          <% if @notification.summary.present? %>
+            <p class="text-sm text-base-content/60 mt-2"><%= @notification.summary %></p>
+          <% end %>
+        </div>
+
+        <%# Hide button %>
+        <%= button_to hide_notification_path(@notification), method: :patch,
+              class: "btn btn-success btn-sm",
+              title: "Mark as done" do %>
+          <i class="bi bi-check-lg"></i>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# Email HTML body %>
+  <div class="card bg-base-100 border border-base-300">
+    <div class="card-body p-0 overflow-hidden rounded-box">
+      <% if @html_body.present? %>
+        <iframe srcdoc="<%= h(@html_body) %>"
+                sandbox="allow-same-origin"
+                class="w-full min-h-[600px] border-0"
+                onload="this.style.height = this.contentDocument.body.scrollHeight + 'px'">
+        </iframe>
+      <% else %>
+        <div class="flex flex-col items-center justify-center py-16 text-base-content/40">
+          <i class="bi bi-envelope-x text-4xl mb-3"></i>
+          <p>No email body available.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

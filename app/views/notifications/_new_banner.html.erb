@@ -1,0 +1,11 @@
+<% if count > 0 %>
+  <a href="/" data-turbo-action="replace"
+     class="alert alert-info cursor-pointer hover:opacity-90 transition-opacity no-underline mb-4">
+    <i class="bi bi-bell-fill"></i>
+    <span>
+      <strong><%= count %> new <%= "notification".pluralize(count) %></strong> —
+      click to refresh
+    </span>
+    <i class="bi bi-arrow-clockwise ml-auto"></i>
+  </a>
+<% end %>

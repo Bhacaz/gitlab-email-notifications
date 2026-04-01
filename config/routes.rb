@@ -8,6 +8,12 @@ Rails.application.routes.draw do
 
   resource :onboarding, only: %i[show update]
 
+  resources :notifications, only: %i[show] do
+    member do
+      patch :hide
+    end
+  end
+
   # OmniAuth GitLab OAuth routes
   get '/sign_in', to: 'sessions#new', as: :sign_in
   get '/oauth/gitlab/callback', to: 'sessions#create'
