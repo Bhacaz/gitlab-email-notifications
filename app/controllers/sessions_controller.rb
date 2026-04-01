@@ -2,7 +2,11 @@
 
 class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :create
-  skip_before_action :require_login, except: :destroy
+  skip_before_action :require_login, only: %i[new create failure]
+
+  def new
+    redirect_to root_path if user_signed_in?
+  end
 
   def create
     user = User.from_omniauth(request.env['omniauth.auth'])
@@ -13,15 +17,15 @@ class SessionsController < ApplicationController
       redirect_to onboarding_path, notice: "Signed in as #{user.name}"
     end
   rescue StandardError => e
-    redirect_to root_path, alert: "Authentication failed: #{e.message}"
+    redirect_to sign_in_path, alert: "Authentication failed: #{e.message}"
   end
 
   def destroy
     session[:user_id] = nil
-    redirect_to root_path, notice: 'Signed out successfully'
+    redirect_to sign_in_path, notice: 'Signed out successfully'
   end
 
   def failure
-    redirect_to root_path, alert: "Authentication failed: #{params[:message]}"
+    redirect_to sign_in_path, alert: "Authentication failed: #{params[:message]}"
   end
 end

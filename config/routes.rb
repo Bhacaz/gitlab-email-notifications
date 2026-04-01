@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resource :onboarding, only: %i[show update]
 
   # OmniAuth GitLab OAuth routes
+  get '/sign_in', to: 'sessions#new', as: :sign_in
   get '/oauth/gitlab/callback', to: 'sessions#create'
   get '/auth/failure', to: 'sessions#failure'
   delete '/sign_out', to: 'sessions#destroy', as: :sign_out

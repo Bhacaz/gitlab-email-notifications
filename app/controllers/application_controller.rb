@@ -18,6 +18,6 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
-    redirect_to root_path, alert: 'Please sign in.' unless user_signed_in?
+    redirect_to sign_in_path, alert: 'Please sign in.' unless user_signed_in?
   end
 end

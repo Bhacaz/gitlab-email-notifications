@@ -4,7 +4,9 @@
       <i class="bi bi-gitlab text-6xl text-primary"></i>
       <h1 class="text-4xl font-bold mt-4"><%= Rails.app_class.name.split('::').first %></h1>
       <p class="py-4 text-base-content/60">GitLab email notifications dashboard</p>
+      <%= button_to "/auth/gitlab", data: { turbo: false }, class: "btn btn-primary" do %>
+        <i class="bi bi-gitlab"></i> Sign in with GitLab
+      <% end %>
     </div>
   </div>
 </div>
-
