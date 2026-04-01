@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'home#index'
 
+  resource :onboarding, only: %i[show update]
+
   # OmniAuth GitLab OAuth routes
   get '/oauth/gitlab/callback', to: 'sessions#create'
   get '/auth/failure', to: 'sessions#failure'

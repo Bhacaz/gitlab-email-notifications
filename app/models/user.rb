@@ -6,8 +6,9 @@ class User < ApplicationRecord
   validates :email_prefix, presence: true, uniqueness: true
 
   has_many :notifications, dependent: :destroy
+  has_one :onboarding, dependent: :destroy
 
-  before_validation :init_email_prefix
+  before_validation :init_email_prefix, on: :create
 
   def self.from_omniauth(auth)
     find_or_initialize_by(uid: auth.uid).tap do |user|
@@ -19,13 +20,15 @@ class User < ApplicationRecord
     end
   end
 
+  def notification_email
+    "#{email_prefix}@#{Rails.application.credentials.email_domain}"
+  end
+
   private
 
   def init_email_prefix
-    prefix = SecureRandom.hex(10).downcase
-    while User.exists?(email_prefix: prefix)
-      prefix = SecureRandom.hex(10).downcase
-    end
+    prefix = SecureRandom.hex(8).downcase
+    prefix = SecureRandom.hex(8).downcase while User.exists?(email_prefix: prefix)
     self.email_prefix = prefix
   end
 end

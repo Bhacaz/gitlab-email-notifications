@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_01_011718) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_01_143552) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "message_checksum", null: false
@@ -60,6 +60,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_011718) do
     t.boolean "hidden", default: false, null: false
     t.string "link"
     t.string "message_id", null: false
+    t.integer "reason", limit: 1, default: 0
     t.string "repo"
     t.string "summary"
     t.string "title"
@@ -68,6 +69,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_011718) do
     t.integer "user_id", null: false
     t.index ["message_id"], name: "index_notifications_on_message_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "onboardings", force: :cascade do |t|
+    t.text "confirmation_link"
+    t.datetime "created_at", null: false
+    t.string "message_id"
+    t.integer "state", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_onboardings_on_user_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -87,4 +98,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_011718) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "notifications", "users"
+  add_foreign_key "onboardings", "users"
 end

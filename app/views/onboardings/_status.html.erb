@@ -1,0 +1,36 @@
+<%# frozen_string_literal: true %>
+<div id="onboarding-status">
+  <% if onboarding.awaiting_confirmation? %>
+    <div class="divider"></div>
+    <div class="flex items-start gap-3">
+      <div class="text-success mt-0.5">
+        <i class="bi bi-envelope-check text-2xl"></i>
+      </div>
+      <div class="flex-1">
+        <p class="font-semibold text-base-content">Confirmation email received!</p>
+        <p class="text-sm text-base-content/60 mt-1">
+          Click the link below to confirm your email address on GitLab.
+        </p>
+        <% if onboarding.confirmation_link.present? %>
+          <div data-controller="onboarding-confirm"
+               data-onboarding-confirm-url-value="<%= onboarding_path %>">
+            <a href="<%= onboarding.confirmation_link %>"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn btn-primary mt-3"
+               data-action="click->onboarding-confirm#confirm">
+              <i class="bi bi-box-arrow-up-right"></i>
+              Confirm your email on GitLab
+            </a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="divider"></div>
+    <div class="flex items-center gap-3 text-base-content/50">
+      <span class="loading loading-spinner loading-sm"></span>
+      <span class="text-sm">Waiting for the confirmation email from GitLab&hellip;</span>
+    </div>
+  <% end %>
+</div>
