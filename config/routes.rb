@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get 'manifest' => 'rails/pwa#manifest', as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  mount ActiveStorageDB::Engine => '/active_storage_db'
   scope '/admin' do
     mount SolidQueueDashboard::Engine, at: '/jobs'
     mount SolidApm::Engine, at: '/apm'

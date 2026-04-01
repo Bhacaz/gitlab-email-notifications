@@ -5,6 +5,8 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :email_prefix, presence: true, uniqueness: true
 
+  has_many :notifications, dependent: :destroy
+
   before_validation :init_email_prefix
 
   def self.from_omniauth(auth)
