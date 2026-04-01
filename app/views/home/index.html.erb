@@ -1,21 +1,87 @@
 <%= turbo_stream_from "notifications_new_#{current_user.id}" %>
 
-<div class="w-full max-w-3xl mx-auto">
-  <%# New notifications banner — replaced via Turbo Stream on new arrivals %>
-  <div id="new-notifications-banner"></div>
+<div class="w-full flex gap-8 items-start">
 
-  <% if @notifications.any? %>
-    <ul class="list bg-base-200 rounded-box shadow-sm">
-      <li class="p-4 pb-2 text-xs text-base-content/50 tracking-widest uppercase font-semibold">
-        Notifications
+  <%# ── Sidebar filters ── %>
+  <aside class="shrink-0 sticky top-24">
+    <ul class="menu bg-base-200 rounded-box p-2 gap-0.5 w-68">
+
+      <%# All %>
+      <li>
+        <%= link_to root_path,
+              class: "menu-item flex justify-between #{@active_reason.nil? && @active_repo.nil? ? 'menu-active' : ''}" do %>
+          <span>All</span>
+          <span class="badge badge-sm badge-ghost"><%= @all_count %></span>
+        <% end %>
       </li>
-      <%= render @notifications %>
+
+      <%# Reasons section %>
+      <% if @reasons.any? %>
+        <li class="menu-title mt-2">Reason</li>
+        <% @reasons.each do |reason_key, count| %>
+          <li>
+            <%= link_to root_path(reason: reason_key),
+                  class: "flex justify-between #{@active_reason == reason_key && @active_repo.nil? ? 'menu-active' : ''}" do %>
+              <span class="flex items-center gap-1.5">
+                <% if reason_key == "pipeline_failed" %>
+                  <i class="bi bi-x-circle-fill text-error text-xs"></i> Pipeline
+                <% else %>
+                  <i class="bi bi-bell text-xs"></i> Other
+                <% end %>
+              </span>
+              <span class="badge badge-sm badge-ghost"><%= count %></span>
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
+
+      <%# Repos section %>
+      <% if @repos.any? %>
+        <li class="menu-title mt-2">Repository</li>
+        <% @repos.each do |repo, count| %>
+          <li>
+            <%= link_to root_path(repo: repo),
+                  class: "flex justify-between #{@active_repo == repo && @active_reason.nil? ? 'menu-active' : ''}",
+                  title: repo do %>
+              <span class="truncate text-xs"><%= repo.split("/").last %></span>
+              <span class="badge badge-sm badge-ghost shrink-0"><%= count %></span>
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
+
     </ul>
-  <% else %>
-    <div class="flex flex-col items-center justify-center py-24 text-base-content/30">
-      <i class="bi bi-inbox text-5xl mb-4"></i>
-      <p class="text-lg font-semibold">All caught up</p>
-      <p class="text-sm mt-1">No visible notifications</p>
-    </div>
-  <% end %>
+  </aside>
+
+  <%# ── Notification list ── %>
+  <div class="flex-1 min-w-0">
+    <%# New notifications banner — replaced via Turbo Stream on new arrivals %>
+    <div id="new-notifications-banner"></div>
+
+    <% if @notifications.any? %>
+      <ul class="list bg-base-200 rounded-box shadow-sm">
+        <li class="p-4 pb-2 text-xs text-base-content/50 tracking-widest uppercase font-semibold flex items-center justify-between">
+          <span>Notifications</span>
+          <% if @active_reason.present? || @active_repo.present? %>
+            <%= link_to "Clear filter", root_path, class: "text-xs normal-case font-normal text-base-content/40 hover:text-base-content link link-hover" %>
+          <% end %>
+        </li>
+        <%= render @notifications %>
+      </ul>
+    <% else %>
+      <div class="flex flex-col items-center justify-center py-24 text-base-content/30">
+        <i class="bi bi-inbox text-5xl mb-4"></i>
+        <% if @active_reason.present? || @active_repo.present? %>
+          <p class="text-lg font-semibold">No matches</p>
+          <p class="text-sm mt-1">
+            <%= link_to "Clear filter", root_path, class: "link link-hover text-base-content/40" %>
+          </p>
+        <% else %>
+          <p class="text-lg font-semibold">All caught up</p>
+          <p class="text-sm mt-1">No visible notifications</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
 </div>
