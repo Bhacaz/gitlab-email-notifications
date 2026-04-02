@@ -50,10 +50,10 @@ module NotificationHandlers
 
     # Convenience: unsubscribe link from List-Unsubscribe header.
     def unsubscribe_link
-      @unsubscribe_link ||= begin
-        header = mail.header['List-Unsubscribe']&.value
-        header&.scan(/<(https?:[^>]+)>/)&.flatten&.first
-      end
+      header = mail.header['List-Unsubscribe']&.value
+      return unless header
+
+      header.scan(/<(https?:[^>]+)>/)&.flatten&.first
     end
   end
 end

@@ -48,7 +48,7 @@ module NotificationHandlers
     # refs/merge-requests/<id>/head    → MR !<id>
     # anything else                    → raw value
     def extract_branch(ref)
-      return nil unless ref.present?
+      return nil if ref.blank?
 
       case ref
       when %r{\Arefs/heads/(.+)\z}         then Regexp.last_match(1)

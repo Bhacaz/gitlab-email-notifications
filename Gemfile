@@ -42,9 +42,9 @@ gem 'ar_lazy_preload'
 gem 'omniauth-gitlab', require: 'omniauth/strategies/gitlab'
 gem 'omniauth-rails_csrf_protection'
 
-gem 'solid_queue_dashboard'
-gem "solid_apm"
 gem 'active_storage_db'
+gem 'solid_apm'
+gem 'solid_queue_dashboard'
 
 group :production do
   # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]

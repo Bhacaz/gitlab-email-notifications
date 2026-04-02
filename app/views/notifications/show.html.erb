@@ -3,7 +3,7 @@
 <div class="w-full max-w-4xl mx-auto">
   <%# Back link %>
   <div class="mb-4">
-    <%= link_to root_path, class: "btn btn-ghost btn-sm" do %>
+    <%= link_to root_path, class: 'btn btn-ghost btn-sm' do %>
       <i class="bi bi-arrow-left"></i> Back
     <% end %>
   </div>
@@ -35,7 +35,7 @@
               <span class="badge badge-error badge-sm">Pipeline failed</span>
             <% end %>
             <span class="text-xs text-base-content/40">
-              <%= @notification.created_at.strftime("%b %-d, %Y at %H:%M") %>
+              <%= @notification.created_at.strftime('%b %-d, %Y at %H:%M') %>
             </span>
           </div>
 
@@ -46,8 +46,8 @@
 
         <%# Hide button %>
         <%= button_to hide_notification_path(@notification), method: :patch,
-              class: "btn btn-success btn-sm",
-              title: "Mark as done" do %>
+              class: 'btn btn-success btn-sm',
+              title: 'Mark as done' do %>
           <i class="bi bi-check-lg"></i>
         <% end %>
       </div>

@@ -7,6 +7,6 @@ pin '@hotwired/turbo-rails', to: 'turbo.min.js'
 pin '@hotwired/stimulus', to: 'stimulus.min.js'
 pin '@hotwired/stimulus-loading', to: 'stimulus-loading.js'
 pin_all_from 'app/javascript/controllers', under: 'controllers'
-pin "@rails/actioncable", to: "actioncable.esm.js"
-pin_all_from "app/javascript/channels", under: "channels"
-pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.13
+pin '@rails/actioncable', to: 'actioncable.esm.js'
+pin_all_from 'app/javascript/channels', under: 'channels'
+pin '@rails/request.js', to: '@rails--request.js.js' # @0.0.13

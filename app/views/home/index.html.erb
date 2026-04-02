@@ -9,7 +9,7 @@
       <%# All %>
       <li>
         <%= link_to root_path,
-              class: "menu-item flex justify-between #{@active_reason.nil? && @active_repo.nil? ? 'menu-active' : ''}" do %>
+              class: "menu-item flex justify-between #{'menu-active' if @active_reason.nil? && @active_repo.nil?}" do %>
           <span>All</span>
           <span class="badge badge-sm badge-ghost"><%= @all_count %></span>
         <% end %>
@@ -21,9 +21,9 @@
         <% @reasons.each do |reason_key, count| %>
           <li>
             <%= link_to root_path(reason: reason_key),
-                  class: "flex justify-between #{@active_reason == reason_key && @active_repo.nil? ? 'menu-active' : ''}" do %>
+                  class: "flex justify-between #{'menu-active' if @active_reason == reason_key && @active_repo.nil?}" do %>
               <span class="flex items-center gap-1.5">
-                <% if reason_key == "pipeline_failed" %>
+                <% if reason_key == 'pipeline_failed' %>
                   <i class="bi bi-x-circle-fill text-error text-xs"></i> Pipeline
                 <% else %>
                   <i class="bi bi-bell text-xs"></i> Other
@@ -41,9 +41,9 @@
         <% @repos.each do |repo, count| %>
           <li>
             <%= link_to root_path(repo: repo),
-                  class: "flex justify-between #{@active_repo == repo && @active_reason.nil? ? 'menu-active' : ''}",
+                  class: "flex justify-between #{'menu-active' if @active_repo == repo && @active_reason.nil?}",
                   title: repo do %>
-              <span class="truncate text-xs"><%= repo.split("/").last %></span>
+              <span class="truncate text-xs"><%= repo.split('/').last %></span>
               <span class="badge badge-sm badge-ghost shrink-0"><%= count %></span>
             <% end %>
           </li>
@@ -63,7 +63,7 @@
         <li class="p-4 pb-2 text-xs text-base-content/50 tracking-widest uppercase font-semibold flex items-center justify-between">
           <span>Notifications</span>
           <% if @active_reason.present? || @active_repo.present? %>
-            <%= link_to "Clear filter", root_path, class: "text-xs normal-case font-normal text-base-content/40 hover:text-base-content link link-hover" %>
+            <%= link_to 'Clear filter', root_path, class: 'text-xs normal-case font-normal text-base-content/40 hover:text-base-content link link-hover' %>
           <% end %>
         </li>
         <%= render @notifications %>
@@ -74,7 +74,7 @@
         <% if @active_reason.present? || @active_repo.present? %>
           <p class="text-lg font-semibold">No matches</p>
           <p class="text-sm mt-1">
-            <%= link_to "Clear filter", root_path, class: "link link-hover text-base-content/40" %>
+            <%= link_to 'Clear filter', root_path, class: 'link link-hover text-base-content/40' %>
           </p>
         <% else %>
           <p class="text-lg font-semibold">All caught up</p>

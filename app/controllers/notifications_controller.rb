@@ -7,7 +7,7 @@ class NotificationsController < ApplicationController
     inbound_email = ActionMailbox::InboundEmail.find_by(message_id: @notification.message_id)
     mail = inbound_email&.mail
     @html_body = mail&.html_part&.decoded
-    @html_body ||= mail&.body&.decoded
+    @show ||= mail&.body&.decoded
   end
 
   def hide

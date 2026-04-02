@@ -42,16 +42,16 @@
   </div>
 
   <%# View email button %>
-  <%= link_to notification_path(notification), class: "btn btn-ghost btn-sm btn-square", title: "View email" do %>
+  <%= link_to notification_path(notification), class: 'btn btn-ghost btn-sm btn-square', title: 'View email' do %>
     <i class="bi bi-envelope text-base-content/60"></i>
   <% end %>
 
   <%# Hide (checkmark) button %>
   <%= button_to hide_notification_path(notification), method: :patch,
         data: { turbo_stream: true },
-        class: "btn btn-ghost btn-sm btn-square text-success",
-        title: "Mark as done",
-        form: { "data-turbo-stream": true } do %>
+        class: 'btn btn-ghost btn-sm btn-square text-success',
+        title: 'Mark as done',
+        form: { 'data-turbo-stream': true } do %>
     <i class="bi bi-check-lg text-lg"></i>
   <% end %>
 </li>

@@ -17,7 +17,7 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag 'tailwind', 'data-turbo-track': 'reload' %>
     <%= stylesheet_link_tag 'application', 'data-turbo-track': 'reload' %>
     <%= javascript_importmap_tags %>
   </head>
@@ -50,14 +50,14 @@
               <li class="text-base-content/60 px-4 py-1 text-xs"><%= current_user.notification_email %></li>
               <li class="divider"></li>
               <li>
-                <%= button_to sign_out_path, method: :delete, data: { turbo: false }, class: "btn btn-ghost btn-sm justify-start w-full" do %>
+                <%= button_to sign_out_path, method: :delete, data: { turbo: false }, class: 'btn btn-ghost btn-sm justify-start w-full' do %>
                   <i class="bi bi-box-arrow-right"></i> Sign out
                 <% end %>
               </li>
             </ul>
           </div>
         <% else %>
-          <%= button_to "/auth/gitlab", data: { turbo: false }, class: "btn btn-primary btn-sm" do %>
+          <%= button_to '/auth/gitlab', data: { turbo: false }, class: 'btn btn-primary btn-sm' do %>
             <i class="bi bi-gitlab"></i> Sign in with GitLab
           <% end %>
         <% end %>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from solid_apm (originally 20240608015633)
 class CreateSolidApmTransactions < ActiveRecord::Migration[7.1]
   def change
