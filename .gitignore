@@ -36,17 +36,11 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
-/config/credentials/production.key
-
-/config/credentials/development.key
-
-/config/credentials/test.key
-
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
-
 # Ignore key files for decrypting credentials and more.
 /config/credentials/*.key
+!/config/credentials/test.key
 
 .playwright-mcp

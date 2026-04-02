@@ -43,6 +43,7 @@ gem 'omniauth-gitlab', require: 'omniauth/strategies/gitlab'
 gem 'omniauth-rails_csrf_protection'
 
 gem 'solid_queue_dashboard'
+gem "solid_apm"
 gem 'active_storage_db'
 
 group :production do
@@ -78,5 +79,3 @@ group :test do
   gem 'faker'
   gem 'rspec-rails'
 end
-
-gem "solid_apm", "~> 0.9.0"
