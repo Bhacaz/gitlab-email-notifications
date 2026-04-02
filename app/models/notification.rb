@@ -5,7 +5,8 @@ class Notification < ApplicationRecord
 
   enum :reason, {
     other: 0,
-    pipeline_failed: 1
+    pipeline_failed: 1,
+    pipeline_fixed: 2
   }, prefix: true
 
   scope :visible, -> { where(hidden: false) }
