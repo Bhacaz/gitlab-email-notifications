@@ -79,4 +79,4 @@ group :test do
   gem 'rspec-rails'
 end
 
-gem "solid_apm", "~> 0.9.0"
+gem "solid_apm", "~> 0.12.1"
