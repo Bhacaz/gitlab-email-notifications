@@ -19,11 +19,12 @@
       <% if @reasons.any? %>
         <li class="menu-title mt-2">Reason</li>
         <% @reasons.each do |reason_key, count| %>
+          <% reason = Notification::REASONS.find { |r| r.name.to_s == reason_key } %>
           <li>
             <%= link_to root_path(reason: reason_key),
                   class: "flex justify-between #{'menu-active' if @active_reason == reason_key && @active_repo.nil?}" do %>
               <span class="flex items-center gap-1.5">
-                <i class="bi bi-bell text-xs"></i> <%= reason_key.gsub('_', ' ').capitalize %>
+                <i class="<%= reason&.icon_class %> text-xs"></i> <%= reason&.display_name || reason_key.tr('_', ' ').capitalize %>
               </span>
               <span class="badge badge-sm badge-ghost"><%= count %></span>
             <% end %>

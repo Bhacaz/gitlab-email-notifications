@@ -3,11 +3,17 @@
 class Notification < ApplicationRecord
   belongs_to :user
 
-  enum :reason, {
-    other: 0,
-    pipeline_failed: 1,
-    pipeline_fixed: 2
-  }, prefix: true
+  Reason = Struct.new(:name, :value, :display_name, :icon_class)
+
+  REASONS = [
+    Reason.new(:other, 0, 'Other', 'bi bi-bell'),
+    Reason.new(:pipeline_failed, 1, 'Pipeline Failed', 'bi bi-exclamation-triangle'),
+    Reason.new(:pipeline_fixed, 2, 'Pipeline Fixed', 'bi bi-check-circle')
+  ].freeze
+
+  enum :reason,
+       REASONS.to_h { |reason| [reason.name, reason.value] },
+       prefix: true
 
   scope :visible, -> { where(hidden: false) }
 

@@ -263,8 +263,7 @@ RSpec.describe NotificationsMailbox do
       # that does not populate the field.
       stub_handler = instance_double(NotificationHandlers::PipelineFailed,
                                      attributes: { reason: :pipeline_failed, repo: nil })
-      allow(NotificationHandlers::PipelineFailed).to receive(:matches?).and_return(true)
-      allow(NotificationHandlers::PipelineFailed).to receive(:new).and_return(stub_handler)
+      allow(NotificationHandlers::PipelineFailed).to receive_messages(matches?: true, new: stub_handler)
 
       receive_inbound_email_from_fixture('pipeline_failed.eml')
 

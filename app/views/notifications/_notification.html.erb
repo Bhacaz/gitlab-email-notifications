@@ -1,8 +1,9 @@
 <li class="list-row" id="notification_<%= notification.id %>">
   <%# Icon col — reason %>
+  <% reason = Notification::REASONS.find { |r| r.name.to_s == notification.reason } %>
   <div class="flex items-center">
-    <div class="tooltip" data-tip="Notification">
-      <i class="bi bi-bell-fill text-base-content/40 text-xl"></i>
+    <div class="tooltip" data-tip="<%= reason&.display_name || 'Notification' %>">
+      <i class="<%= reason&.icon_class || 'fa-solid fa-bell' %> text-base-content/40 text-xl"></i>
     </div>
   </div>
 

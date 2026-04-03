@@ -80,4 +80,4 @@ group :test do
   gem 'rspec-rails'
 end
 
-gem "solid_errors", "~> 0.7.0"
+gem 'solid_errors', '~> 0.7.0'
