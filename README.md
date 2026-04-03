@@ -41,3 +41,20 @@ email_domain: gitlab.example.com
 action_mailbox:
   mailgun_signing_key: key-abc
 ```
+
+## Admin view and engine
+
+The project mount some admin views:
+
+* SolidErrors: App error. Accessible at `/admin/errors`
+* SolidApm: App performance monitoring. Accessible at `/admin/apm`
+* MissionControl: Background jobs monitoring. Accessible at `/admin/jobs`
+
+Setup admin username and password in credentials:
+
+```yaml
+# bin/rails credentials:edit
+admin:
+  username: admin
+  password: password
+```
