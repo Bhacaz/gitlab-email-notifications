@@ -40,13 +40,14 @@ class NotificationsMailbox < ApplicationMailbox
 
   def process_notification_email(user)
     handler = notification_handler
-    attrs = handler ? handler.attributes : {}
+    handler_attrs = handler ? handler.attributes.compact : {}
 
     user.notifications.create!(
       {
         title: mail.subject,
-        message_id: mail.message_id
-      }.merge(attrs)
+        message_id: mail.message_id,
+        repo: gitlab_project_path
+      }.merge(handler_attrs)
     )
   end
 
@@ -59,5 +60,9 @@ class NotificationsMailbox < ApplicationMailbox
   def extract_confirmation_link
     body = mail.text_part&.decoded || mail.body.decoded
     body[%r{https?://\S+/-/profile/emails/confirmation\?\S+}]
+  end
+
+  def gitlab_project_path
+    mail.header['X-GitLab-Project-Path']&.value
   end
 end

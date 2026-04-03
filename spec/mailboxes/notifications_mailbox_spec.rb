@@ -250,4 +250,25 @@ RSpec.describe NotificationsMailbox do
       expect(user.notifications.last.title).to eq('Test1')
     end
   end
+
+  # ------------------------------------------------------------------
+  # repo fallback: mailbox-level value wins when handler omits repo
+  # ------------------------------------------------------------------
+
+  describe 'repo parsing fallback' do
+    before { user }
+
+    it 'uses the X-GitLab-Project-Path header when the handler does not set repo' do
+      # Stub a handler that explicitly returns repo: nil to simulate a handler
+      # that does not populate the field.
+      stub_handler = instance_double(NotificationHandlers::PipelineFailed,
+                                     attributes: { reason: :pipeline_failed, repo: nil })
+      allow(NotificationHandlers::PipelineFailed).to receive(:matches?).and_return(true)
+      allow(NotificationHandlers::PipelineFailed).to receive(:new).and_return(stub_handler)
+
+      receive_inbound_email_from_fixture('pipeline_failed.eml')
+
+      expect(user.notifications.last.repo).to eq('my-group/my-project')
+    end
+  end
 end
