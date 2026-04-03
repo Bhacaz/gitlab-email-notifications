@@ -27,6 +27,8 @@ class User < ApplicationRecord
   private
 
   def init_email_prefix
+    return if email_prefix.present?
+
     prefix = SecureRandom.hex(8).downcase
     prefix = SecureRandom.hex(8).downcase while User.exists?(email_prefix: prefix)
     self.email_prefix = prefix
