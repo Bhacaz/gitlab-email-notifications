@@ -8,6 +8,8 @@ module Middleware
       @app = app
       @username = Rails.application.credentials.admin&.username
       @password = Rails.application.credentials.admin&.password
+
+      return if ENV['SECRET_KEY_BASE_DUMMY']
       raise 'Admin credentials not set.' if @username.blank? || @password.blank?
     end
 
