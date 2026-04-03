@@ -11,7 +11,7 @@ require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_mailbox/engine'
-require 'action_text/engine'
+# require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
 # require "rails/test_unit/railtie"
@@ -36,8 +36,11 @@ module GitlabEmailNotifications
     # Don't generate system test files.
     config.generators.system_tests = nil
 
+    config.session_store :cookie_store, expire_after: 20.years
+
     config.active_job.queue_adapter = :solid_queue
     config.solid_queue.connects_to = { database: { writing: :queue } }
+    SolidApm.connects_to = { database: { writing: :solid_apm } }
     config.action_mailbox.ingress = :mailgun
     config.active_storage.service = :db
   end

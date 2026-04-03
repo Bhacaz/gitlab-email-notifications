@@ -33,6 +33,6 @@ Rails.application.routes.draw do
   mount ActiveStorageDB::Engine => '/active_storage_db'
   scope '/admin' do
     mount SolidQueueDashboard::Engine, at: '/jobs'
-    mount SolidApm::Engine, at: '/apm'
+    mount SolidApm::Engine,            at: '/apm'
   end
 end
