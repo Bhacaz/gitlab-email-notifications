@@ -3,7 +3,7 @@
 @source not "./daisyui{,*}.mjs";
 
 @plugin "./daisyui.mjs" {
-    themes: night --default, night --prefersdark;
+    themes: dim --default, dim --prefersdark;
 }
 
 /* @plugin "./daisyui-theme.mjs"{ */
