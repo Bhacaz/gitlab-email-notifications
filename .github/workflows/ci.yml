@@ -67,7 +67,7 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-      - run: bin/rails assets:precompile
+      - run: SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
       - name: Run tests
         run: bin/rspec
 
