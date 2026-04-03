@@ -28,3 +28,9 @@ Metrics/AbcSize:
   Max: 35
   Exclude:
     - db/migrate/**/*.rb
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 5
