@@ -13,7 +13,7 @@
 # matches the test-credential email_domain ("gitlab.example.com") and the
 # user created by the `let(:user)` below.
 
-RSpec.describe NotificationsMailbox, type: :mailbox do
+RSpec.describe NotificationsMailbox do
   include ActionMailbox::TestHelper
 
   # ------------------------------------------------------------------
@@ -88,11 +88,11 @@ RSpec.describe NotificationsMailbox, type: :mailbox do
       end
 
       it 'broadcasts an onboarding status update over Turbo' do
-        expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to).with(
+        inbound_email
+        expect(Turbo::StreamsChannel).to have_received(:broadcast_replace_to).with(
           "onboarding_#{user.id}",
           hash_including(target: 'onboarding-status')
-        )
-        inbound_email
+        ).once
       end
 
       context 'when the user already has an onboarding record' do
