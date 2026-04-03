@@ -86,4 +86,8 @@ Rails.application.configure do
 
   # Add basic auth for /admin endpoints.
   config.middleware.use Middleware::AdminBasicAuth
+
+  # Configure Solid Errors
+  config.solid_errors.connects_to = { database: { writing: :errors } }
+  config.solid_errors.destroy_after = 30.days
 end

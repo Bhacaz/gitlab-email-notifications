@@ -75,3 +75,7 @@ production:
   solid_apm:
     <<: *default_solid_apm
     database: storage/production_solid_apm.sqlite3
+  errors:
+    <<: *default
+    database: storage/production_errors.sqlite3
+    migrations_paths: db/errors_migrate

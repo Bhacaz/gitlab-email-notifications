@@ -79,3 +79,5 @@ group :test do
   gem 'faker'
   gem 'rspec-rails'
 end
+
+gem "solid_errors", "~> 0.7.0"
