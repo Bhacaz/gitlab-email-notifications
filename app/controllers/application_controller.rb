@@ -7,6 +7,11 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :user_signed_in?
   before_action :require_login
 
+  before_action do
+    Rails.error.set_context(user_id: session[:user_id], params: params.to_json)
+    SolidApm.set_context(user_id: session[:user_id])
+  end
+
   private
 
   def current_user
