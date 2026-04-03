@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+return if ENV['SECRET_KEY_BASE_DUMMY']
+
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :gitlab,
            Rails.application.credentials.gitlab.application_id,
