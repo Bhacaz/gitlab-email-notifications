@@ -4,7 +4,7 @@
 
   <%# ── Sidebar filters ── %>
   <aside class="shrink-0 sticky top-24">
-    <ul class="menu bg-base-200 rounded-box p-2 gap-0.5 w-68">
+    <ul class="menu bg-base-200 rounded-box p-2 gap-0.5 min-w-72">
 
       <%# All %>
       <li>
@@ -23,11 +23,7 @@
             <%= link_to root_path(reason: reason_key),
                   class: "flex justify-between #{'menu-active' if @active_reason == reason_key && @active_repo.nil?}" do %>
               <span class="flex items-center gap-1.5">
-                <% if reason_key == 'pipeline_failed' %>
-                  <i class="bi bi-x-circle-fill text-error text-xs"></i> Pipeline
-                <% else %>
-                  <i class="bi bi-bell text-xs"></i> Other
-                <% end %>
+                <i class="bi bi-bell text-xs"></i> <%= reason_key.gsub('_', ' ').capitalize %>
               </span>
               <span class="badge badge-sm badge-ghost"><%= count %></span>
             <% end %>
@@ -43,7 +39,7 @@
             <%= link_to root_path(repo: repo),
                   class: "flex justify-between #{'menu-active' if @active_repo == repo && @active_reason.nil?}",
                   title: repo do %>
-              <span class="truncate text-xs"><%= repo.split('/').last %></span>
+              <span class="truncate text-xs"><%= repo %></span>
               <span class="badge badge-sm badge-ghost shrink-0"><%= count %></span>
             <% end %>
           </li>
