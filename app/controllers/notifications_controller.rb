@@ -14,7 +14,16 @@ class NotificationsController < ApplicationController
     @notification.update!(hidden: true)
 
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove("notification_#{@notification.id}") }
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.remove("notification_#{@notification.id}"),
+          turbo_stream.replace(
+            'notifications-sidebar',
+            partial: 'home/sidebar_filters',
+            locals: Notification.sidebar_locals_for(current_user)
+          )
+        ]
+      end
       format.html { redirect_to root_path }
     end
   end
