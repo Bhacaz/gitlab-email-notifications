@@ -45,7 +45,6 @@ class Notification < ApplicationRecord
       partial: 'notifications/new_banner',
       locals: { count: count }
     )
-    broadcast_sidebar
   end
 
   def broadcast_sidebar
