@@ -1,0 +1,44 @@
+<ul class="menu bg-base-200 rounded-box p-2 gap-0.5 min-w-72">
+
+  <%# All %>
+  <li>
+    <%= link_to root_path,
+          class: "menu-item flex justify-between #{'menu-active' if active_reason.nil? && active_repo.nil?}" do %>
+      <span>All</span>
+      <span class="badge badge-sm badge-ghost"><%= all_count %></span>
+    <% end %>
+  </li>
+
+  <%# Reasons section %>
+  <% if reasons.any? %>
+    <li class="menu-title mt-2">Reason</li>
+    <% reasons.each do |reason_key, count| %>
+      <% reason = Notification::REASONS.find { |r| r.name.to_s == reason_key } %>
+      <li>
+        <%= link_to root_path(reason: reason_key),
+              class: "flex justify-between #{'menu-active' if active_reason == reason_key && active_repo.nil?}" do %>
+          <span class="flex items-center gap-1.5">
+            <i class="<%= reason&.icon_class %> text-xs"></i> <%= reason&.display_name || reason_key.tr('_', ' ').capitalize %>
+          </span>
+          <span class="badge badge-sm badge-ghost"><%= count %></span>
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
+
+  <%# Repos section %>
+  <% if repos.any? %>
+    <li class="menu-title mt-2">Repository</li>
+    <% repos.each do |repo, count| %>
+      <li>
+        <%= link_to root_path(repo: repo),
+              class: "flex justify-between #{'menu-active' if active_repo == repo && active_reason.nil?}",
+              title: repo do %>
+          <span class="truncate text-xs"><%= repo %></span>
+          <span class="badge badge-sm badge-ghost shrink-0"><%= count %></span>
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
+
+</ul>
