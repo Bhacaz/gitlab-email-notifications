@@ -3,6 +3,7 @@
 class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :create
   skip_before_action :require_login, only: %i[new create failure]
+  rate_limit to: 10, within: 3.minutes, only: :create
 
   def new
     redirect_to root_path if user_signed_in?
