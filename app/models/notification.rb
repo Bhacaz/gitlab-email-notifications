@@ -8,7 +8,9 @@ class Notification < ApplicationRecord
   REASONS = [
     Reason.new(:other, 0, 'Other', 'bi bi-bell'),
     Reason.new(:pipeline_failed, 1, 'Pipeline Failed', 'bi bi-exclamation-triangle'),
-    Reason.new(:pipeline_fixed, 2, 'Pipeline Fixed', 'bi bi-check-circle')
+    Reason.new(:pipeline_fixed, 2, 'Pipeline Fixed', 'bi bi-check-circle'),
+    Reason.new(:mr_discussion, 3, 'MR Discussion', 'bi bi-chat-left-dots'),
+    Reason.new(:mr_comment, 4, 'MR Comment', 'bi bi-chat-left-text')
   ].freeze
 
   enum :reason,
@@ -18,7 +20,6 @@ class Notification < ApplicationRecord
   scope :visible, -> { where(hidden: false) }
 
   after_create_commit :broadcast_new_banner
-  after_update_commit :broadcast_sidebar
 
   def self.sidebar_locals_for(user, active_reason: nil, active_repo: nil)
     base = user.notifications.visible
@@ -45,15 +46,6 @@ class Notification < ApplicationRecord
       target: 'new-notifications-banner',
       partial: 'notifications/new_banner',
       locals: { count: count }
-    )
-  end
-
-  def broadcast_sidebar
-    Turbo::StreamsChannel.broadcast_replace_to(
-      "notifications_new_#{user_id}",
-      target: 'notifications-sidebar',
-      partial: 'home/sidebar_filters',
-      locals: Notification.sidebar_locals_for(user)
     )
   end
 end

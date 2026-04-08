@@ -7,7 +7,14 @@
 #   confirmation_second.eml  – A second confirmation email (duplicate token)
 #   pipeline_failed.eml      – GitLab CI "Failed pipeline" notification
 #   pipeline_fixed.eml       – GitLab CI "Fixed pipeline" notification
+#   mr_discussion_1.eml      – GitLab MR "started a new discussion" on a file
+#   mr_discussion_2.eml      – GitLab MR "started a new discussion" on another file
+#   mr_comment_1.eml         – GitLab MR top-level "commented" review comment
 #   unknown_sender.eml       – Plain email from an external sender (no handler)
+#
+# Detailed handler-level specs live in:
+#   spec/mailboxes/notification_handlers/mr_discussion_spec.rb
+#   spec/mailboxes/notification_handlers/mr_comment_spec.rb
 #
 # All fixtures are addressed to abc123def456abc1@gitlab.example.com which
 # matches the test-credential email_domain ("gitlab.example.com") and the
@@ -268,6 +275,46 @@ RSpec.describe NotificationsMailbox do
       receive_inbound_email_from_fixture('pipeline_failed.eml')
 
       expect(user.notifications.last.repo).to eq('my-group/my-project')
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # MR discussion (inline diff discussion on a file)
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_discussion_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'MR discussion email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_discussion_1.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason mr_discussion' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('mr_discussion')
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # MR comment (top-level review comment)
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_comment_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'MR comment email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_comment_1.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason mr_comment' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('mr_comment')
     end
   end
 end

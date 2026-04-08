@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+# Force all NotificationHandlers subclasses to be loaded so that
+# NotificationHandlers::Base.descendants is complete at runtime.
+Rails.autoloaders.main.eager_load_dir(
+  Rails.root.join('app/mailboxes/notification_handlers')
+)
+
 class NotificationsMailbox < ApplicationMailbox
   CONFIRMATION_SUBJECT = 'Confirmation instructions'
 

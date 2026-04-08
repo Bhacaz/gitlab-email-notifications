@@ -12,9 +12,9 @@ class SessionsController < ApplicationController
     user = User.from_omniauth(request.env['omniauth.auth'])
     session[:user_id] = user.id
     if user.onboarding&.completed?
-      redirect_to root_path, notice: "Signed in as #{user.name}"
+      redirect_to root_path
     else
-      redirect_to onboarding_path, notice: "Signed in as #{user.name}"
+      redirect_to onboarding_path
     end
   rescue StandardError => e
     redirect_to sign_in_path, alert: "Authentication failed: #{e.message}"
