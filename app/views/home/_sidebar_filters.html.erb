@@ -5,7 +5,7 @@
     <%= link_to root_path,
           class: "menu-item flex justify-between #{'menu-active' if active_reason.nil? && active_repo.nil?}" do %>
       <span>All</span>
-      <% if all_count > 0 %>
+      <% if all_count.positive? %>
         <span class="badge badge-sm badge-ghost"><%= all_count %></span>
       <% end %>
     <% end %>
@@ -21,7 +21,7 @@
         <span class="flex items-center gap-1.5">
           <i class="<%= reason&.icon_class %> text-xs"></i> <%= reason&.display_name || reason_key.tr('_', ' ').capitalize %>
         </span>
-        <% if count > 0 %>
+        <% if count.positive? %>
           <span class="badge badge-sm badge-ghost"><%= count %></span>
         <% end %>
       <% end %>
