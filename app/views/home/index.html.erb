@@ -3,7 +3,7 @@
 <div class="w-full flex gap-8 items-start">
 
   <%# ── Sidebar filters ── %>
-  <aside id="notifications-sidebar" class="shrink-0 sticky top-24">
+  <aside class="shrink-0 sticky top-20">
     <%= render 'home/sidebar_filters',
           all_count: @all_count,
           reasons: @reasons,
@@ -21,9 +21,6 @@
       <ul class="list bg-base-200 rounded-box shadow-sm">
         <li class="p-4 pb-2 text-xs text-base-content/50 tracking-widest uppercase font-semibold flex items-center justify-between">
           <span>Notifications</span>
-          <% if @active_reason.present? || @active_repo.present? %>
-            <%= link_to 'Clear filter', root_path, class: 'text-xs normal-case font-normal text-base-content/40 hover:text-base-content link link-hover' %>
-          <% end %>
         </li>
         <%= render @notifications %>
       </ul>
@@ -42,5 +39,4 @@
       </div>
     <% end %>
   </div>
-
 </div>

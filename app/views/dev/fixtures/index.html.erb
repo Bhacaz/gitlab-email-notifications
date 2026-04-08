@@ -1,0 +1,46 @@
+<% content_for :title, 'Dev – Fixture Mailer' %>
+
+<div class="w-full max-w-2xl mx-auto py-8">
+  <div class="flex items-center gap-3 mb-6">
+    <i class="bi bi-envelope-paper text-2xl text-primary"></i>
+    <div>
+      <h1 class="text-xl font-bold">Fixture Mailer</h1>
+      <p class="text-sm text-base-content/50">
+        Deliver a fixture EML to
+        <span class="font-mono text-base-content/70"><%= current_user.notification_email %></span>
+      </p>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr>
+          <th>Fixture</th>
+          <th>Description</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @fixtures.each do |fixture| %>
+          <tr>
+            <td class="font-mono text-xs text-base-content/60"><%= fixture[:name] %></td>
+            <td class="text-sm"><%= fixture[:description] %></td>
+            <td class="text-right">
+              <%= button_to 'Send',
+                    dev_fixture_deliver_path(name: fixture[:name]),
+                    method: :post,
+                    class: 'btn btn-primary btn-xs' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-6">
+    <%= link_to root_path, class: 'btn btn-ghost btn-sm' do %>
+      <i class="bi bi-arrow-left"></i> Back to notifications
+    <% end %>
+  </div>
+</div>

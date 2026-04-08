@@ -1,32 +1,10 @@
-X-Original-To: abc123def456abc1@gitlab.example.com
-X-Envelope-From: user@example.com
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52]) by
- 40760b4958e73c60c430536f01c3737ffdf3b1b40d1d6656de82e0b1bbb5f462 with SMTP id
- <undefined> (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256); Wed, 01 Apr 2026
- 12:39:35 GMT
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-40efc77933fso4341595fac.3
-        for <abc123def456abc1@gitlab.example.com>; Wed, 01 Apr 2026 05:39:34 -0700 (PDT)
-ARC-Seal: anon
-ARC-Message-Signature: anon
-ARC-Authentication-Results: anon
-DKIM-Signature: anon
-X-Google-DKIM-Signature: anon
-MIME-Version: 1.0
-From: Test User <user@example.com>
-Date: Wed, 1 Apr 2026 08:39:21 -0400
-Message-ID: <CAE43vOrY-tt4a10ec-Vm=nJOWynyF5KfqAE01iXF=RQVW8VBEw@mail.gmail.com>
-Subject: Test1
+Date: Wed, 08 Apr 2026 00:00:00 +0000
+From: External Sender <external@example.com>
 To: abc123def456abc1@gitlab.example.com
-Content-Type: multipart/alternative; boundary="000000000000476bfd064e656052"
-
---000000000000476bfd064e656052
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <unknown-sender-1@example.com>
+Subject: Test1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 Hello
-
---000000000000476bfd064e656052
-Content-Type: text/html; charset="UTF-8"
-
-<div dir="ltr">Hello</div>
-
---000000000000476bfd064e656052--

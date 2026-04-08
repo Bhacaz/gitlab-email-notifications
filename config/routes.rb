@@ -28,7 +28,11 @@ Rails.application.routes.draw do
   get 'manifest' => 'rails/pwa#manifest', as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  get '/dev/login', to: 'dev/sessions#create', as: :dev_login if Rails.env.development?
+  if Rails.env.development?
+    get  '/dev/login',            to: 'dev/sessions#create',   as: :dev_login
+    get  '/dev/fixtures',         to: 'dev/fixtures#index',    as: :dev_fixtures
+    post '/dev/fixtures/deliver', to: 'dev/fixtures#deliver',  as: :dev_fixture_deliver
+  end
 
   mount ActiveStorageDB::Engine => '/active_storage_db'
   scope '/admin' do
