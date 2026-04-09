@@ -13,7 +13,6 @@ module NotificationHandlers
   #   repo               => project path from X-GitLab-Project-Path header
   #   summary            => "Pipeline #<id> fixed – <branch or MR>"
   #   link               => pipeline URL from the plain-text body
-  #   unsubscribe_link   => List-Unsubscribe URL
   class PipelineFixed < Base
     SUBJECT_PATTERN = /Fixed pipeline for/i
 
@@ -32,8 +31,7 @@ module NotificationHandlers
         title: mail.subject,
         repo: repo,
         summary: build_summary(pipeline_id, branch),
-        link: pipeline_link(pipeline_id),
-        unsubscribe_link: unsubscribe_link
+        link: pipeline_link(pipeline_id)
       }
     end
 

@@ -1,0 +1,37 @@
+Date: Wed, 08 Apr 2026 00:00:00 +0000
+From: GitLab <gitlab@mg.gitlab.example.com>
+To: abc123def456abc1@gitlab.example.com
+Message-ID: <other-1@gitlab.example.com>
+Subject: Re: My project | My MR title (!42)
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="--==_mimepart_other"
+List-Unsubscribe: <https://gitlab.example.com/-/sent_notifications/abc123/unsubscribe>,<mailto:unsub@example.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+X-GitLab-Project-Path: my-group/my-project
+X-GitLab-MergeRequest-IID: 42
+
+----==_mimepart_other
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+All discussions on merge request !42 were resolved.
+
+--
+Reply to this email directly or view it on GitLab: https://gitlab.example.com/my-group/my-project/-/merge_requests/42
+You're receiving this email because of your account on gitlab.example.com. Unsubscribe from this thread: https://gitlab.example.com/-/sent_notifications/abc123/unsubscribe
+
+----==_mimepart_other
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>All discussions on merge request <a href="https://gitlab.example.com/my-group/my-project/-/merge_requests/42">!42</a> were resolved.</p>
+<p>
+  Reply to this email directly or <a href="https://gitlab.example.com/my-group/my-project/-/merge_requests/42">view it on GitLab</a>.
+</p>
+</body>
+</html>
+
+----==_mimepart_other--

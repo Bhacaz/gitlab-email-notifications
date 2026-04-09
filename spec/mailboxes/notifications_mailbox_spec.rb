@@ -11,6 +11,7 @@
 #   mr_discussion_2.eml      – GitLab MR "started a new discussion" on another file
 #   mr_comment_1.eml         – GitLab MR top-level "commented" review comment
 #   unknown_sender.eml       – Plain email from an external sender (no handler)
+#   other.eml                – Anonymised GitLab "other" notification (resolved discussions)
 #
 # Detailed handler-level specs live in:
 #   spec/mailboxes/notification_handlers/mr_discussion_spec.rb
@@ -255,6 +256,49 @@ RSpec.describe NotificationsMailbox do
     it 'uses the mail subject as the notification title' do
       inbound_email
       expect(user.notifications.last.title).to eq('Test1')
+    end
+
+    it 'has no unsubscribe_link when List-Unsubscribe header is absent' do
+      inbound_email
+      expect(user.notifications.last.unsubscribe_link).to be_nil
+    end
+
+    it 'has no link when there is no "view it on GitLab" anchor' do
+      inbound_email
+      expect(user.notifications.last.link).to be_nil
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # Other GitLab notification (e.g. resolved discussions, no specific handler)
+  # ------------------------------------------------------------------
+
+  describe 'other GitLab notification email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('other.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason other' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('other')
+    end
+
+    it 'extracts the unsubscribe link from the List-Unsubscribe header' do
+      inbound_email
+      expect(user.notifications.last.unsubscribe_link).to eq(
+        'https://gitlab.example.com/-/sent_notifications/abc123/unsubscribe'
+      )
+    end
+
+    it 'extracts the link from the "view it on GitLab" anchor in the HTML part' do
+      inbound_email
+      expect(user.notifications.last.link).to eq(
+        'https://gitlab.example.com/my-group/my-project/-/merge_requests/42'
+      )
     end
   end
 

@@ -13,7 +13,6 @@ module NotificationHandlers
   #   repo               => project path from X-GitLab-Project-Path header
   #   summary            => "MR !<iid> – commented"
   #   link               => note anchor URL from the plain-text body
-  #   unsubscribe_link   => List-Unsubscribe URL
   class MrComment < Base
     def self.matches?(mail)
       body = mail.text_part&.decoded || mail.body.decoded
@@ -30,8 +29,7 @@ module NotificationHandlers
         title: mail.subject,
         repo: repo,
         summary: "MR !#{mr_iid} \u2013 commented",
-        link: mr_note_link,
-        unsubscribe_link: unsubscribe_link
+        link: mr_note_link
       }
     end
 

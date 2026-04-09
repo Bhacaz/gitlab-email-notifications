@@ -52,7 +52,9 @@ class NotificationsMailbox < ApplicationMailbox
       {
         title: mail.subject,
         message_id: mail.message_id,
-        repo: gitlab_project_path
+        repo: gitlab_project_path,
+        unsubscribe_link: extract_unsubscribe_link,
+        link: extract_gitlab_link
       }.merge(handler_attrs)
     )
   end
@@ -66,6 +68,24 @@ class NotificationsMailbox < ApplicationMailbox
   def extract_confirmation_link
     body = mail.text_part&.decoded || mail.body.decoded
     body[%r{https?://\S+/-/profile/emails/confirmation\?\S+}]
+  end
+
+  def extract_unsubscribe_link
+    header = mail.header['List-Unsubscribe']&.value
+    return unless header
+
+    header.scan(/<(https?:[^>]+)>/)&.flatten&.first
+  end
+
+  # Extracts the URL from the first <a> whose visible text is "view it on GitLab"
+  # in the HTML part, falling back to nil when no such link is present.
+  def extract_gitlab_link
+    html = mail.html_part&.decoded
+    return unless html
+
+    doc = Nokogiri::HTML(html)
+    anchor = doc.css('a').find { |a| a.text.strip.downcase == 'view it on gitlab' }
+    anchor&.[]('href')
   end
 
   def gitlab_project_path

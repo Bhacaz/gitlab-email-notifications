@@ -47,13 +47,5 @@ module NotificationHandlers
     def extract_link(pattern)
       text_body[pattern]
     end
-
-    # Convenience: unsubscribe link from List-Unsubscribe header.
-    def unsubscribe_link
-      header = mail.header['List-Unsubscribe']&.value
-      return unless header
-
-      header.scan(/<(https?:[^>]+)>/)&.flatten&.first
-    end
   end
 end
