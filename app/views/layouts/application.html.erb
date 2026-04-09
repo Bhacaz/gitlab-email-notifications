@@ -37,23 +37,29 @@
                 <% if current_user.avatar_url.present? %>
                   <img src="<%= current_user.avatar_url %>" alt="<%= current_user.name %>" referrerpolicy="no-referrer">
                 <% else %>
-                  <div class="bg-neutral text-neutral-content w-10 h-10 rounded-full flex items-center justify-center">
-                    <span class="text-lg font-bold"><%= current_user.name&.first&.upcase %></span>
+                  <div class="avatar-placeholder">
+                    <div class="bg-neutral text-neutral-content w-10 rounded-full">
+                      <span class="text-lg font-bold"><%= current_user.name&.first&.upcase %></span>
+                    </div>
                   </div>
                 <% end %>
               </div>
             </div>
-            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-              <li class="menu-title"><%= current_user.name %></li>
-              <li class="text-base-content/60 px-4 py-1 text-xs">@<%= current_user.username %></li>
-              <li class="text-base-content/60 px-4 py-1 text-xs"><%= current_user.notification_email %></li>
-              <li class="divider"></li>
-              <li>
-                <%= button_to sign_out_path, method: :delete, data: { turbo: false }, class: 'btn btn-ghost btn-sm justify-start w-full' do %>
-                  <i class="bi bi-box-arrow-right"></i> Sign out
-                <% end %>
-              </li>
-            </ul>
+            <div tabindex="0" class="dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-64 shadow-lg overflow-hidden">
+              <div class="px-4 pt-3 pb-2 min-w-0">
+                <p class="font-semibold text-sm truncate"><%= current_user.name %></p>
+                <p class="text-xs text-base-content/50 truncate">@<%= current_user.username %></p>
+                <p class="text-xs text-base-content/50 truncate"><%= current_user.notification_email %></p>
+              </div>
+              <div class="divider my-0"></div>
+              <ul class="menu menu-sm p-2">
+                <li>
+                  <%= button_to sign_out_path, method: :delete, data: { turbo: false }, class: 'w-full' do %>
+                    <i class="bi bi-box-arrow-right"></i> Sign out
+                  <% end %>
+                </li>
+              </ul>
+            </div>
           </div>
         <% else %>
           <%= button_to '/auth/gitlab', data: { turbo: false }, class: 'btn btn-primary btn-sm' do %>
