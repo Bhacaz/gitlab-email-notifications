@@ -10,12 +10,18 @@
 #   mr_discussion_1.eml      – GitLab MR "started a new discussion" on a file
 #   mr_discussion_2.eml      – GitLab MR "started a new discussion" on another file
 #   mr_comment_1.eml         – GitLab MR top-level "commented" review comment
+#   mr_approved.eml          – GitLab MR "approved" notification
+#   mr_reviewed.eml          – GitLab MR "reviewed" notification
+#   cannot_be_merged.eml     – GitLab MR "cannot be merged" conflict notification
 #   unknown_sender.eml       – Plain email from an external sender (no handler)
 #   other.eml                – Anonymised GitLab "other" notification (resolved discussions)
 #
 # Detailed handler-level specs live in:
 #   spec/mailboxes/notification_handlers/mr_discussion_spec.rb
 #   spec/mailboxes/notification_handlers/mr_comment_spec.rb
+#   spec/mailboxes/notification_handlers/mr_approved_spec.rb
+#   spec/mailboxes/notification_handlers/mr_reviewed_spec.rb
+#   spec/mailboxes/notification_handlers/cannot_be_merged_spec.rb
 #
 # All fixtures are addressed to abc123def456abc1@gitlab.example.com which
 # matches the test-credential email_domain ("gitlab.example.com") and the
@@ -359,6 +365,66 @@ RSpec.describe NotificationsMailbox do
     it 'creates a Notification with reason mr_comment' do
       expect { inbound_email }.to change { user.notifications.count }.by(1)
       expect(user.notifications.last.reason).to eq('mr_comment')
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # MR approved
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_approved_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'MR approved email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_approved.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason mr_approved' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('mr_approved')
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # MR reviewed
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_reviewed_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'MR reviewed email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_reviewed.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason mr_reviewed' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('mr_reviewed')
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # Cannot be merged (merge conflict)
+  # Full handler specs: spec/mailboxes/notification_handlers/cannot_be_merged_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'cannot be merged email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('cannot_be_merged.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason cannot_be_merged' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('cannot_be_merged')
     end
   end
 end

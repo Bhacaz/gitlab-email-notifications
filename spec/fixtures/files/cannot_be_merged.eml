@@ -1,0 +1,15 @@
+Date: Wed, 08 Apr 2026 00:00:00 +0000
+From: GitLab <noreply@gitlab.example.com>
+To: abc123def456abc1@gitlab.example.com
+Message-ID: <cannot-be-merged-1@gitlab.example.com>
+Subject: Re: My merge request title (!199)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GitLab-MergeRequest-IID: 199
+X-GitLab-Project-Path: my-group/my-project
+List-Unsubscribe: <https://gitlab.example.com/-/sent_notifications/4-ghi/unsubscribe>
+
+Merge request !199 can no longer be merged due to conflict.
+Merge request URL: https://gitlab.example.com/my-group/my-project/-/merge_requests/199
+Branches: feature-branch to main

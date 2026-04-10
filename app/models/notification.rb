@@ -10,7 +10,10 @@ class Notification < ApplicationRecord
     Reason.new(:pipeline_failed, 1, 'Pipeline Failed', 'bi bi-exclamation-triangle'),
     Reason.new(:pipeline_fixed, 2, 'Pipeline Fixed', 'bi bi-check-circle'),
     Reason.new(:mr_discussion, 3, 'MR Discussion', 'bi bi-chat-left-dots'),
-    Reason.new(:mr_comment, 4, 'MR Comment', 'bi bi-chat-left-text')
+    Reason.new(:mr_comment, 4, 'MR Comment', 'bi bi-chat-left-text'),
+    Reason.new(:mr_approved, 5, 'MR Approved', 'bi bi-check2-circle'),
+    Reason.new(:mr_reviewed, 6, 'MR Reviewed', 'bi bi-eye'),
+    Reason.new(:cannot_be_merged, 7, 'Cannot Be Merged', 'bi bi-exclamation-circle')
   ].freeze
 
   enum :reason,
