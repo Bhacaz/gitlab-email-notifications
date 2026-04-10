@@ -46,6 +46,7 @@
 
         <%# Hide button %>
         <%= button_to hide_notification_path(@notification), method: :patch,
+              form: { data: { turbo: false } },
               class: 'btn btn-success btn-sm',
               title: 'Mark as done' do %>
           <i class="bi bi-check-lg"></i>

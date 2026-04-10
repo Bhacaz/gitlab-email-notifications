@@ -14,10 +14,10 @@
       <% if notification.link.present? %>
         <a href="<%= notification.link %>" target="_blank" rel="noopener noreferrer"
            class="link link-hover font-semibold leading-snug line-clamp-1 text-base-content">
-          <%= notification.title %>
+          <%= notification.summary || notification.title %>
         </a>
       <% else %>
-        <p class="font-semibold leading-snug line-clamp-1 text-base-content"><%= notification.title %></p>
+        <p class="font-semibold leading-snug line-clamp-1 text-base-content"><%= notification.summary || notification.title %></p>
       <% end %>
     </div>
 
@@ -29,11 +29,6 @@
             <i class="bi bi-folder2"></i><%= notification.repo %>
           </span>
           <% end %>
-          <% if notification.summary.present? %>
-          <span class="flex items-center gap-1 line-clamp-1">
-            <i class="bi bi-signpost-split"></i><%= notification.summary %>
-          </span>
-        <% end %>
       </span>
 
       <span><%= time_ago_in_words(notification.created_at) %> ago</span>
