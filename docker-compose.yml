@@ -1,0 +1,32 @@
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      # Generate with: docker run --rm <image> bin/rails secret
+      - SECRET_KEY_BASE=
+
+      # GitLab OAuth Application (https://gitlab.com/-/profile/applications)
+      - GITLAB_APP_ID=
+      - GITLAB_APP_SECRET=
+      - GITLAB_CALLBACK_URL=https://your-domain.example.com/oauth/gitlab/callback
+
+      # Custom email domain configured in Mailgun
+      - EMAIL_DOMAIN=gitlab.example.com
+
+      # Mailgun HTTP webhook signing key (from Mailgun → API Security)
+      - MAILGUN_SIGNING_KEY=key-
+
+      # Admin panel basic auth (/admin/errors, /admin/apm, /admin/jobs)
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=changeme
+
+      # Optional
+      # - RAILS_LOG_LEVEL=info
+    volumes:
+      - storage:/rails/storage
+
+volumes:
+  storage:

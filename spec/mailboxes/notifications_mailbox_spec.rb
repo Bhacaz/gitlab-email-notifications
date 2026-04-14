@@ -59,7 +59,7 @@ RSpec.describe NotificationsMailbox do
   describe 'routing' do
     it 'routes emails addressed to the notifications domain to NotificationsMailbox' do
       expect(described_class).to receive_inbound_email(
-        to: "abc123def456abc1@#{Rails.application.credentials.email_domain}",
+        to: "abc123def456abc1@#{Rails.application.config.x.email_domain}",
         from: 'gitlab@mg.gitlab.example.com',
         subject: 'Hello'
       )
