@@ -3,7 +3,7 @@
 # Specs for NotificationHandlers::MrDiscussion
 #
 # Fixtures:
-#   mr_discussion_1.eml  – "started a new discussion" on mos-fhir-event.module.ts (MR !199)
+#   mr_discussion_1.eml  – "started a new discussion" on app.module.ts (MR !199)
 #   mr_discussion_2.eml  – "started a new discussion" on environment.ts (MR !199)
 
 RSpec.describe NotificationHandlers::MrDiscussion do
@@ -57,7 +57,7 @@ RSpec.describe NotificationHandlers::MrDiscussion do
   # Fixture: mr_discussion_1.eml
   # ------------------------------------------------------------------
 
-  describe 'mr_discussion_1.eml – new discussion on mos-fhir-event.module.ts' do
+  describe 'mr_discussion_1.eml – new discussion on app.module.ts' do
     subject(:inbound_email) { receive_inbound_email_from_fixture('mr_discussion_1.eml') }
 
     before { user }
