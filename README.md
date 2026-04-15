@@ -1,6 +1,8 @@
 # GitLab Email Notifications
 
-The missing self-hosted notification center that [GitLab doesn't have](https://gitlab.com/gitlab-org/gitlab/-/work_items/14889).
+The missing **notification center** that [GitLab doesn't have](https://gitlab.com/gitlab-org/gitlab/-/work_items/14889).
+
+![img.png](docs/img.png)
 
 It ingests GitLab notification emails via Mailgun and presents them in a unified, filterable inbox.
 Authentication is handled via GitLab OAuth.
