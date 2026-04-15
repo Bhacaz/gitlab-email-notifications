@@ -1,17 +1,19 @@
 services:
   web:
-    build: .
+    image: ghcr.io/bhacaz/gitlab-email-notifications:latest
+    container_name: gitlab_email_notifications
     restart: unless-stopped
     ports:
+      # Expose the web interface on port 80 (or change as needed)
       - "80:80"
     environment:
-      # Generate with: docker run --rm <image> bin/rails secret
+      # Generate with: bin/rails secret or any 128-character random string
       - SECRET_KEY_BASE=
 
       # GitLab OAuth Application (https://gitlab.com/-/profile/applications)
-      - GITLAB_APP_ID=
-      - GITLAB_APP_SECRET=
-      - GITLAB_CALLBACK_URL=https://your-domain.example.com/oauth/gitlab/callback
+      - GITLAB__APP_ID=
+      - GITLAB__APP_SECRET=gloas-
+      - GITLAB__CALLBACK_URL=https://your-domain.example.com/oauth/gitlab/callback
 
       # Custom email domain configured in Mailgun
       - EMAIL_DOMAIN=gitlab.example.com
@@ -20,11 +22,8 @@ services:
       - MAILGUN_SIGNING_KEY=key-
 
       # Admin panel basic auth (/admin/errors, /admin/apm, /admin/jobs)
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=changeme
-
-      # Optional
-      # - RAILS_LOG_LEVEL=info
+      - ADMIN__USERNAME=admin
+      - ADMIN__PASSWORD=changeme
     volumes:
       - storage:/rails/storage
 

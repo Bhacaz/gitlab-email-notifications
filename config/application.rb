@@ -47,12 +47,12 @@ module GitlabEmailNotifications
     # Load configuration from environment variables.
     # In development/test, set these in a .env file (see .env.example).
     # In production, inject them via Docker environment or your hosting platform.
-    config.x.gitlab.application_id  = ENV.fetch('GITLAB_APP_ID', nil)
-    config.x.gitlab.secret_id       = ENV.fetch('GITLAB_APP_SECRET', nil)
-    config.x.gitlab.callback_url    = ENV.fetch('GITLAB_CALLBACK_URL', nil)
+    config.x.gitlab.application_id  = ENV.fetch('GITLAB__APP_ID', nil)
+    config.x.gitlab.secret_id       = ENV.fetch('GITLAB__APP_SECRET', nil)
+    config.x.gitlab.callback_url    = ENV.fetch('GITLAB__CALLBACK_URL', nil)
     config.x.email_domain           = ENV.fetch('EMAIL_DOMAIN', nil)
-    config.x.admin.username         = ENV.fetch('ADMIN_USERNAME', nil)
-    config.x.admin.password         = ENV.fetch('ADMIN_PASSWORD', nil)
+    config.x.admin.username         = ENV.fetch('ADMIN__USERNAME', nil)
+    config.x.admin.password         = ENV.fetch('ADMIN__PASSWORD', nil)
     config.action_mailbox.ingress_password = ENV.fetch('MAILGUN_SIGNING_KEY', nil)
   end
 end
