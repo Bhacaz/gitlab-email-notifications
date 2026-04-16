@@ -85,19 +85,22 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   # Make environment variables required in production.
-  required_env = lambda do |key|
-    ENV.fetch(key).presence || raise(KeyError, "#{key} is required and cannot be blank")
+  # Skip runtime-only env enforcement during build/asset precompile, where
+  # `SECRET_KEY_BASE_DUMMY=1` is commonly used and these settings are not needed.
+  if ENV['SECRET_KEY_BASE_DUMMY'].blank?
+    required_env = lambda do |key|
+      ENV.fetch(key).presence || raise(KeyError, "#{key} is required and cannot be blank")
+    end
+
+    config.email_domain = required_env.call('EMAIL_DOMAIN')
+    config.x.gitlab.application_id  = required_env.call('GITLAB__APP_ID')
+    config.x.gitlab.secret_id       = required_env.call('GITLAB__APP_SECRET')
+    config.x.gitlab.callback_url    = required_env.call('GITLAB__CALLBACK_URL')
+    config.x.admin.username         = required_env.call('ADMIN__USERNAME')
+    config.x.admin.password         = required_env.call('ADMIN__PASSWORD')
+    # Add basic auth for /admin endpoints.
+    config.middleware.use Middleware::AdminBasicAuth
   end
-
-  config.email_domain = required_env.call('EMAIL_DOMAIN')
-  config.x.gitlab.application_id  = required_env.call('GITLAB__APP_ID')
-  config.x.gitlab.secret_id       = required_env.call('GITLAB__APP_SECRET')
-  config.x.gitlab.callback_url    = required_env.call('GITLAB__CALLBACK_URL')
-  config.x.admin.username         = required_env.call('ADMIN__USERNAME')
-  config.x.admin.password         = required_env.call('ADMIN__PASSWORD')
-  # Add basic auth for /admin endpoints.
-  config.middleware.use Middleware::AdminBasicAuth
-
   # Configure Solid Errors
   config.solid_errors.connects_to = { database: { writing: :errors } }
   config.solid_errors.destroy_after = 30.days
