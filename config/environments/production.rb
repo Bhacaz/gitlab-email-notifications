@@ -85,7 +85,7 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   # Make environment variables required in production.
-  config.email_domain           = ENV.fetch('EMAIL_DOMAIN')
+  config.email_domain = ENV.fetch('EMAIL_DOMAIN')
   config.x.gitlab.application_id  = ENV.fetch('GITLAB__APP_ID')
   config.x.gitlab.secret_id       = ENV.fetch('GITLAB__APP_SECRET')
   config.x.gitlab.callback_url    = ENV.fetch('GITLAB__CALLBACK_URL')
