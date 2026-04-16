@@ -85,13 +85,16 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   # Make environment variables required in production.
-  config.email_domain = ENV.fetch('EMAIL_DOMAIN')
-  config.x.gitlab.application_id  = ENV.fetch('GITLAB__APP_ID')
-  config.x.gitlab.secret_id       = ENV.fetch('GITLAB__APP_SECRET')
-  config.x.gitlab.callback_url    = ENV.fetch('GITLAB__CALLBACK_URL')
-  config.x.admin.username         = ENV.fetch('ADMIN__USERNAME')
-  config.x.admin.password         = ENV.fetch('ADMIN__PASSWORD')
+  required_env = lambda do |key|
+    ENV.fetch(key).presence || raise(KeyError, "#{key} is required and cannot be blank")
+  end
 
+  config.email_domain = required_env.call('EMAIL_DOMAIN')
+  config.x.gitlab.application_id  = required_env.call('GITLAB__APP_ID')
+  config.x.gitlab.secret_id       = required_env.call('GITLAB__APP_SECRET')
+  config.x.gitlab.callback_url    = required_env.call('GITLAB__CALLBACK_URL')
+  config.x.admin.username         = required_env.call('ADMIN__USERNAME')
+  config.x.admin.password         = required_env.call('ADMIN__PASSWORD')
   # Add basic auth for /admin endpoints.
   config.middleware.use Middleware::AdminBasicAuth
 
