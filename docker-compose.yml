@@ -19,7 +19,7 @@ services:
       - EMAIL_DOMAIN=gitlab.example.com
 
       # Mailgun HTTP webhook signing key (from Mailgun → API Security)
-      - MAILGUN_SIGNING_KEY=key-
+      - MAILGUN_INGRESS_SIGNING_KEY=key-
 
       # Admin panel basic auth (/admin/errors, /admin/apm, /admin/jobs)
       - ADMIN__USERNAME=admin

@@ -53,6 +53,5 @@ module GitlabEmailNotifications
     config.x.email_domain           = ENV.fetch('EMAIL_DOMAIN', nil)
     config.x.admin.username         = ENV.fetch('ADMIN__USERNAME', nil)
     config.x.admin.password         = ENV.fetch('ADMIN__PASSWORD', nil)
-    config.action_mailbox.ingress_password = ENV.fetch('MAILGUN_SIGNING_KEY', nil)
   end
 end

@@ -33,7 +33,7 @@ Set them in `.env` for local development, or pass them directly in `docker-compo
 | `GITLAB__APP_SECRET` | Yes | OAuth Application Secret from GitLab.                                                                                     |
 | `GITLAB__CALLBACK_URL` | Yes | Full URL to `https://example.com/oauth/gitlab/callback` on your domain.                                                   |
 | `EMAIL_DOMAIN` | Yes | The custom domain configured in Mailgun (e.g. `gitlab.example.com`).                                                      |
-| `MAILGUN_SIGNING_KEY` | Yes | HTTP webhook signing key from Mailgun API Security.                                                                       |
+| `MAILGUN_INGRESS_SIGNING_KEY` | Yes | HTTP webhook signing key from Mailgun API Security. Read automatically by Action Mailbox.                                 |
 | `ADMIN__USERNAME` | Yes | Username for the admin panel (HTTP Basic Auth).                                                                           |
 | `ADMIN__PASSWORD` | Yes | Password for the admin panel (HTTP Basic Auth).                                                                           |
 
@@ -54,7 +54,7 @@ Set them in `.env` for local development, or pass them directly in `docker-compo
 3. Create a **Route**:
    - **Match recipient:** `.*@gitlab.example.com`
    - **Action → Forward:** `https://your-domain.example.com/rails/action_mailbox/mailgun/inbound_emails/mime`
-4. Go to **API Security** → copy the **HTTP webhook signing key** → `MAILGUN_SIGNING_KEY`.
+4. Go to **API Security** → copy the **HTTP webhook signing key** → `MAILGUN_INGRESS_SIGNING_KEY`.
 5. Set `EMAIL_DOMAIN=gitlab.example.com`.
 
 In GitLab, configure your notification emails to go to
