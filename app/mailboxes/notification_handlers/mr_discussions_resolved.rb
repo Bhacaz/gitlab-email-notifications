@@ -26,11 +26,11 @@ module NotificationHandlers
       proj   = project_name
 
       {
-        reason:  :discussions_resolved,
-        title:   "All discussions resolved \u2013 !#{mr_iid}",
-        repo:    repo,
-        summary: "All discussions on MR !#{mr_iid} resolved by #{actor}#{proj ? " (#{proj})" : ''}",
-        link:    mr_link
+        reason: :discussions_resolved,
+        title: "All discussions resolved \u2013 !#{mr_iid}",
+        repo: repo,
+        summary: "All discussions on MR !#{mr_iid} resolved by #{actor}#{" (#{proj})" if proj}",
+        link: mr_link
       }
     end
 

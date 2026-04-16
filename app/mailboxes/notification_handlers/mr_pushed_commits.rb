@@ -26,11 +26,11 @@ module NotificationHandlers
       proj   = project_name
 
       {
-        reason:  :pushed_commits,
-        title:   "#{actor} pushed to !#{mr_iid}",
-        repo:    repo,
-        summary: "New commits pushed to MR !#{mr_iid}#{proj ? " (#{proj})" : ''}",
-        link:    mr_link
+        reason: :pushed_commits,
+        title: "#{actor} pushed to !#{mr_iid}",
+        repo: repo,
+        summary: "New commits pushed to MR !#{mr_iid}#{" (#{proj})" if proj}",
+        link: mr_link
       }
     end
 

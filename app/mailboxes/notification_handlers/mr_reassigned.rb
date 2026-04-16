@@ -26,18 +26,18 @@ module NotificationHandlers
       proj    = project_name
 
       summary_parts = if person.present?
-        ["#{person} added as assignee on MR !#{mr_iid}"]
-      else
-        ["MR !#{mr_iid} reassigned"]
-      end
+                        ["#{person} added as assignee on MR !#{mr_iid}"]
+                      else
+                        ["MR !#{mr_iid} reassigned"]
+                      end
       summary_parts << "(#{proj})" if proj.present?
 
       {
-        reason:  :mr_reassigned,
-        title:   "MR !#{mr_iid} reassigned",
-        repo:    repo,
+        reason: :mr_reassigned,
+        title: "MR !#{mr_iid} reassigned",
+        repo: repo,
         summary: summary_parts.join(' '),
-        link:    mr_link
+        link: mr_link
       }
     end
 

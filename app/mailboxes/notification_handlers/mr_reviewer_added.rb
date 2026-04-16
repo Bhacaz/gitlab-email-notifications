@@ -26,11 +26,11 @@ module NotificationHandlers
       proj   = project_name
 
       {
-        reason:  :reviewer_added,
-        title:   "#{person} added as reviewer \u2013 !#{mr_iid}",
-        repo:    repo,
-        summary: "Reviewer #{person} added to MR !#{mr_iid}#{proj ? " (#{proj})" : ''}",
-        link:    mr_link
+        reason: :reviewer_added,
+        title: "#{person} added as reviewer \u2013 !#{mr_iid}",
+        repo: repo,
+        summary: "Reviewer #{person} added to MR !#{mr_iid}#{" (#{proj})" if proj}",
+        link: mr_link
       }
     end
 

@@ -35,7 +35,7 @@ class Notification < ApplicationRecord
       all_count: base.count,
       reasons: REASONS
                .to_h { |r| [r.name.to_s, reason_counts.fetch(r.name.to_s, 0)] }
-               .select { |_, c| c > 0 },
+               .select { |_, c| c.positive? },
       repos: base.where.not(repo: nil).group(:repo).count.sort_by { |_, c| -c },
       active_reason: active_reason,
       active_repo: active_repo
