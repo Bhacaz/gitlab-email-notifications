@@ -84,6 +84,14 @@ Rails.application.configure do
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
+  # Make environment variables required in production.
+  config.email_domain           = ENV.fetch('EMAIL_DOMAIN')
+  config.x.gitlab.application_id  = ENV.fetch('GITLAB__APP_ID')
+  config.x.gitlab.secret_id       = ENV.fetch('GITLAB__APP_SECRET')
+  config.x.gitlab.callback_url    = ENV.fetch('GITLAB__CALLBACK_URL')
+  config.x.admin.username         = ENV.fetch('ADMIN__USERNAME')
+  config.x.admin.password         = ENV.fetch('ADMIN__PASSWORD')
+
   # Add basic auth for /admin endpoints.
   config.middleware.use Middleware::AdminBasicAuth
 

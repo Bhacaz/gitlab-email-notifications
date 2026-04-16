@@ -21,7 +21,7 @@ class User < ApplicationRecord
   end
 
   def notification_email
-    "#{email_prefix}@#{Rails.application.config.x.email_domain}"
+    "#{email_prefix}@#{Rails.application.config.email_domain}"
   end
 
   private

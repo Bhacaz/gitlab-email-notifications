@@ -37,8 +37,6 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-      - name: Set up environment
-        run: cp .env.example .env
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
@@ -68,8 +66,6 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-      - name: Set up environment
-        run: cp .env.example .env
       - run: SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
       - name: Run tests
         run: bin/rspec
