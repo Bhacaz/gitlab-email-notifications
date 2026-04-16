@@ -70,7 +70,7 @@ jobs:
           bundler-cache: true
       - name: Set up environment
         run: cp .env.example .env
-      - run: bin/rails assets:precompile
+      - run: SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
       - name: Run tests
         run: bin/rspec
 
