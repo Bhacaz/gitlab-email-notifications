@@ -12,18 +12,18 @@ services:
 
       # GitLab OAuth Application (https://gitlab.com/-/profile/applications)
       - GITLAB__APP_ID=
-      - GITLAB__APP_SECRET=gloas-
-      - GITLAB__CALLBACK_URL=https://your-domain.example.com/oauth/gitlab/callback
+      - GITLAB__APP_SECRET=
+      - GITLAB__CALLBACK_URL=
 
       # Custom email domain configured in Mailgun
-      - EMAIL_DOMAIN=gitlab.example.com
+      - EMAIL_DOMAIN=
 
       # Mailgun HTTP webhook signing key (from Mailgun → API Security)
-      - MAILGUN_INGRESS_SIGNING_KEY=key-
+      - MAILGUN_INGRESS_SIGNING_KEY=
 
       # Admin panel basic auth (/admin/errors, /admin/apm, /admin/jobs)
-      - ADMIN__USERNAME=admin
-      - ADMIN__PASSWORD=changeme
+      - ADMIN__USERNAME=
+      - ADMIN__PASSWORD=
     volumes:
       - storage:/rails/storage
 
