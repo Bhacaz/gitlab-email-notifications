@@ -1,13 +1,14 @@
 Date: Wed, 08 Apr 2026 00:00:00 +0000
 From: GitLab <noreply@gitlab.example.com>
 To: abc123def456abc1@gitlab.example.com
-Message-ID: <mr-comment-1@gitlab.example.com>
+Message-ID: <mr-discussions-resolved-1@gitlab.example.com>
 Subject: Re: My merge request title (!199)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-GitLab-MergeRequest-IID: 199
 X-GitLab-Project-Path: my-group/my-project
-List-Unsubscribe: <https://gitlab.example.com/-/sent_notifications/4-789/unsubscribe>
+List-Unsubscribe: <https://gitlab.example.com/-/sent_notifications/4-res/unsubscribe>
 
-A Reviewer commented: https://gitlab.example.com/my-group/my-project/-/merge_requests/199#note_1000003
+All discussions on merge request !199 were resolved by A Reviewer
+Merge request URL: https://gitlab.example.com/my-group/my-project/-/merge_requests/199

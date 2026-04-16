@@ -8,9 +8,9 @@ module NotificationHandlers
   #
   # Extracted fields:
   #   reason   => :cannot_be_merged
-  #   title    => mail subject
+  #   title    => "!{iid} cannot be merged"
   #   repo     => project path from X-GitLab-Project-Path header
-  #   summary  => "MR !<iid> – cannot be merged"
+  #   summary  => "MR !{iid} has a conflict – {branch} ({project})"
   #   link     => merge request URL from the plain-text body
   class CannotBeMerged < Base
     def self.matches?(mail)
@@ -20,19 +20,32 @@ module NotificationHandlers
     end
 
     def attributes
-      mr_iid = gitlab_header('MergeRequest-IID')
-      repo   = gitlab_header('Project-Path')
+      mr_iid   = gitlab_header('MergeRequest-IID')
+      repo     = gitlab_header('Project-Path')
+      branches = extract_branches_from_body
+      proj     = project_name
+
+      summary_parts = ["MR !#{mr_iid} has a conflict"]
+      summary_parts << branches if branches.present?
+      summary_parts << "(#{proj})" if proj.present?
 
       {
         reason: :cannot_be_merged,
-        title: mail.subject,
+        title: "!#{mr_iid} cannot be merged",
         repo: repo,
-        summary: "MR !#{mr_iid} \u2013 cannot be merged",
+        summary: summary_parts.join(' \u2013 '),
         link: mr_link
       }
     end
 
     private
+
+    def extract_branches_from_body
+      m = text_body.match(/^Branches:\s+(.+?) to (.+)$/)
+      return nil unless m
+
+      "#{m[1].strip} \u2192 #{m[2].strip}"
+    end
 
     def mr_link
       extract_link(%r{https?://\S+/-/merge_requests/\d+})

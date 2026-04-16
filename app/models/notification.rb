@@ -13,7 +13,11 @@ class Notification < ApplicationRecord
     Reason.new(:mr_comment, 4, 'MR Comment', 'bi bi-chat-left-text'),
     Reason.new(:mr_approved, 5, 'MR Approved', 'bi bi-check2-circle'),
     Reason.new(:mr_reviewed, 6, 'MR Reviewed', 'bi bi-eye'),
-    Reason.new(:cannot_be_merged, 7, 'Cannot Be Merged', 'bi bi-exclamation-circle')
+    Reason.new(:cannot_be_merged, 7, 'Cannot Be Merged', 'bi bi-exclamation-circle'),
+    Reason.new(:discussions_resolved, 8, 'Discussions Resolved', 'bi bi-check-all'),
+    Reason.new(:reviewer_added, 9, 'Reviewer Added', 'bi bi-person-check'),
+    Reason.new(:pushed_commits, 10, 'Pushed Commits', 'bi bi-git'),
+    Reason.new(:mr_reassigned, 11, 'MR Reassigned', 'bi bi-person-fill-gear')
   ].freeze
 
   enum :reason,

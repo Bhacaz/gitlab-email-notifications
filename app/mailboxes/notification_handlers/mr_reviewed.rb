@@ -8,9 +8,9 @@ module NotificationHandlers
   #
   # Extracted fields:
   #   reason   => :mr_reviewed
-  #   title    => mail subject
+  #   title    => "{reviewer} reviewed – !{iid}"
   #   repo     => project path from X-GitLab-Project-Path header
-  #   summary  => "MR !<iid> – reviewed"
+  #   summary  => "MR !{iid} reviewed by {reviewer} ({project})"
   #   link     => merge request URL from the plain-text body
   class MrReviewed < Base
     def self.matches?(mail)
@@ -20,14 +20,16 @@ module NotificationHandlers
     end
 
     def attributes
-      mr_iid = gitlab_header('MergeRequest-IID')
-      repo   = gitlab_header('Project-Path')
+      mr_iid   = gitlab_header('MergeRequest-IID')
+      repo     = gitlab_header('Project-Path')
+      reviewer = extract_actor || 'Someone'
+      proj     = project_name
 
       {
         reason: :mr_reviewed,
-        title: mail.subject,
+        title: "#{reviewer} reviewed \u2013 !#{mr_iid}",
         repo: repo,
-        summary: "MR !#{mr_iid} \u2013 reviewed",
+        summary: "MR !#{mr_iid} reviewed by #{reviewer}#{" (#{proj})" if proj}",
         link: mr_link
       }
     end

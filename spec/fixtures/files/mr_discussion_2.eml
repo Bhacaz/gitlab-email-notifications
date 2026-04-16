@@ -10,6 +10,4 @@ X-GitLab-MergeRequest-IID: 199
 X-GitLab-Project-Path: my-group/my-project
 List-Unsubscribe: <https://gitlab.example.com/-/sent_notifications/4-456/unsubscribe>
 
-started a new discussion on another-file.ts
-
-https://gitlab.example.com/my-group/my-project/-/merge_requests/199#note_1000002
+A Reviewer started a new discussion on another-file.ts: https://gitlab.example.com/my-group/my-project/-/merge_requests/199#note_1000002

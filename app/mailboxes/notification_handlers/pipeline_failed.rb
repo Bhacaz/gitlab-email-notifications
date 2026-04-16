@@ -7,11 +7,11 @@ module NotificationHandlers
   # Falls back to subject-line pattern for emails without the header.
   #
   # Extracted fields:
-  #   reason             => :pipeline_failed
-  #   title              => mail subject
-  #   repo               => project path from X-GitLab-Project-Path header
-  #   summary            => "Pipeline #<id> failed – <branch>"
-  #   link               => pipeline URL from the plain-text body
+  #   reason   => :pipeline_failed
+  #   title    => "Pipeline failed – {project} ({branch})"
+  #   repo     => project path from X-GitLab-Project-Path header
+  #   summary  => "Pipeline #{id} failed on {branch} – {stage}: {job}"
+  #   link     => pipeline URL from the plain-text body
   class PipelineFailed < Base
     SUBJECT_PATTERN = /Failed pipeline for/i
 
@@ -24,10 +24,15 @@ module NotificationHandlers
       raw_ref     = gitlab_header('Pipeline-Ref')
       branch      = extract_branch(raw_ref)
       repo        = gitlab_header('Project-Path')
+      proj        = project_name
+
+      title_parts = ['Pipeline failed']
+      title_parts << proj if proj.present?
+      title_parts << "(#{branch})" if branch.present?
 
       {
         reason: :pipeline_failed,
-        title: mail.subject,
+        title: title_parts.join(' \u2013 '),
         repo: repo,
         summary: build_summary(pipeline_id, branch),
         link: pipeline_link(pipeline_id)
@@ -58,7 +63,21 @@ module NotificationHandlers
     def build_summary(pipeline_id, branch)
       parts = ["Pipeline ##{pipeline_id} failed"]
       parts << branch if branch.present?
-      parts.join(' – ')
+      parts << extract_failed_job_info if extract_failed_job_info.present?
+      parts.join(' \u2013 ')
+    end
+
+    # Extracts "Stage: lint / Name: job-name" from the body.
+    def extract_failed_job_info
+      @extract_failed_job_info ||= begin
+        stage = text_body[/^Stage:\s*(.+)$/, 1]&.strip
+        job   = text_body[/^Name:\s*(.+)$/, 1]&.strip
+        if stage.present? && job.present?
+          "#{stage}: #{job}"
+        elsif stage.present?
+          stage
+        end
+      end
     end
 
     def pipeline_link(pipeline_id)

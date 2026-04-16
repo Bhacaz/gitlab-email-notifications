@@ -9,15 +9,15 @@
 
   <%# Main content col %>
   <div class="list-col-grow min-w-0">
-    <%# Subject — prominent, external link if available %>
+    <%# Title — prominent, external link if available %>
     <div class="pb-1">
       <% if notification.link.present? %>
         <a href="<%= notification.link %>" target="_blank" rel="noopener noreferrer"
            class="link link-hover font-semibold leading-snug line-clamp-1 text-base-content">
-          <%= notification.summary || notification.title %>
+          <%= notification.title %>
         </a>
       <% else %>
-        <p class="font-semibold leading-snug line-clamp-1 text-base-content"><%= notification.summary || notification.title %></p>
+        <p class="font-semibold leading-snug line-clamp-1 text-base-content"><%= notification.title %></p>
       <% end %>
     </div>
 
@@ -28,7 +28,10 @@
           <span class="flex items-center gap-1">
             <i class="bi bi-folder2"></i><%= notification.repo %>
           </span>
-          <% end %>
+        <% end %>
+        <% if notification.summary.present? %>
+          <p class="line-clamp-1 text-xs text-base-content/50"><%= notification.summary %></p>
+        <% end %>
       </span>
 
       <span><%= time_ago_in_words(notification.created_at) %> ago</span>
@@ -52,10 +55,10 @@
 
   <%# Hide (checkmark) button %>
   <%= button_to hide_notification_path(notification), method: :patch,
-        data: { turbo_stream: true },
-        class: 'btn btn-ghost btn-sm btn-square text-success',
-        title: 'Mark as done',
-        form: { 'data-turbo-stream': true } do %>
+                data: { turbo_stream: true },
+                class: 'btn btn-ghost btn-sm btn-square text-success',
+                title: 'Mark as done',
+                form: { 'data-turbo-stream': true } do %>
     <i class="bi bi-check-lg text-lg"></i>
   <% end %>
 </li>

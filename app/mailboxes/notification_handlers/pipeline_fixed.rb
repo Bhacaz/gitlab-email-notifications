@@ -8,11 +8,11 @@ module NotificationHandlers
   # alone for emails without the header.
   #
   # Extracted fields:
-  #   reason             => :pipeline_fixed
-  #   title              => mail subject
-  #   repo               => project path from X-GitLab-Project-Path header
-  #   summary            => "Pipeline #<id> fixed – <branch or MR>"
-  #   link               => pipeline URL from the plain-text body
+  #   reason   => :pipeline_fixed
+  #   title    => "Pipeline fixed – {project} ({branch})"
+  #   repo     => project path from X-GitLab-Project-Path header
+  #   summary  => "Pipeline #{id} fixed – {branch or MR}"
+  #   link     => pipeline URL from the plain-text body
   class PipelineFixed < Base
     SUBJECT_PATTERN = /Fixed pipeline for/i
 
@@ -25,10 +25,15 @@ module NotificationHandlers
       pipeline_id = gitlab_header('Pipeline-Id')
       branch      = extract_branch(gitlab_header('Pipeline-Ref'))
       repo        = gitlab_header('Project-Path')
+      proj        = project_name
+
+      title_parts = ['Pipeline fixed']
+      title_parts << proj if proj.present?
+      title_parts << "(#{branch})" if branch.present?
 
       {
         reason: :pipeline_fixed,
-        title: mail.subject,
+        title: title_parts.join(' \u2013 '),
         repo: repo,
         summary: build_summary(pipeline_id, branch),
         link: pipeline_link(pipeline_id)
@@ -59,7 +64,7 @@ module NotificationHandlers
     def build_summary(pipeline_id, branch)
       parts = ["Pipeline ##{pipeline_id} fixed"]
       parts << branch if branch.present?
-      parts.join(' – ')
+      parts.join(' \u2013 ')
     end
 
     def pipeline_link(pipeline_id)
