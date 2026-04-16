@@ -6,8 +6,6 @@ module Middleware
 
     def initialize(app)
       @app = app
-      return if ENV['SECRET_KEY_BASE_DUMMY']
-
       @username = Rails.application.config.x.admin&.username
       @password = Rails.application.config.x.admin&.password
 
