@@ -21,44 +21,46 @@
       <% end %>
     </div>
 
-    <%# Secondary line — repo / ref / MR / timestamp %>
-    <div class="flex flex-col gap-y-2 mt-0.5 text-xs text-base-content/40">
-      <span class="flex gap-4">
+    <%# Secondary line — repo / summary / timestamp %>
+    <div class="flex flex-col gap-y-1 mt-0.5 text-xs text-base-content/40">
+      <% if notification.summary.present? %>
+        <span class="truncate text-base-content/50 mb-3"><%= notification.summary %></span>
+      <% end %>
+      <div class="flex items-center gap-1 min-w-0 overflow-hidden">
         <% if notification.repo.present? %>
-          <span class="flex items-center gap-1">
+          <span class="flex items-center gap-1 shrink-0">
             <i class="bi bi-folder2"></i><%= notification.repo %>
           </span>
         <% end %>
-        <% if notification.summary.present? %>
-          <p class="line-clamp-1 text-xs text-base-content/50"><%= notification.summary %></p>
-        <% end %>
-      </span>
-
-      <span><%= time_ago_in_words(notification.created_at) %> ago</span>
+        <span>・ </span>
+        <span><%= time_ago_in_words(notification.created_at) %> ago</span>
+      </div>
     </div>
   </div>
 
-  <%# Unsubscribe button — only shown when a link was parsed from the email %>
-  <% if notification.unsubscribe_link.present? %>
-    <%= link_to notification.unsubscribe_link,
-                target: '_blank', rel: 'noopener noreferrer',
-                class: 'btn btn-ghost btn-sm btn-square text-base-content/40',
-                title: 'Unsubscribe' do %>
-      <i class="bi bi-bell-slash"></i>
+  <div class="flex items-center gap-3">
+    <%# Unsubscribe button — only shown when a link was parsed from the email %>
+    <% if notification.unsubscribe_link.present? %>
+      <%= link_to notification.unsubscribe_link,
+                  target: '_blank', rel: 'noopener noreferrer',
+                  class: 'btn btn-ghost btn-sm btn-square text-base-content/40',
+                  title: 'Unsubscribe' do %>
+        <i class="bi bi-bell-slash"></i>
+      <% end %>
     <% end %>
-  <% end %>
 
-  <%# View email button %>
-  <%= link_to notification_path(notification), class: 'btn btn-ghost btn-sm btn-square', title: 'View email' do %>
-    <i class="bi bi-envelope text-base-content/60"></i>
-  <% end %>
+    <%# View email button %>
+    <%= link_to notification_path(notification), class: 'btn btn-ghost btn-sm btn-square', title: 'View email' do %>
+      <i class="bi bi-envelope text-base-content/60"></i>
+    <% end %>
 
-  <%# Hide (checkmark) button %>
-  <%= button_to hide_notification_path(notification), method: :patch,
-                data: { turbo_stream: true },
-                class: 'btn btn-ghost btn-sm btn-square text-success',
-                title: 'Mark as done',
-                form: { 'data-turbo-stream': true } do %>
-    <i class="bi bi-check-lg text-lg"></i>
-  <% end %>
+    <%# Hide (checkmark) button %>
+    <%= button_to hide_notification_path(notification), method: :patch,
+                  data: { turbo_stream: true },
+                  class: 'btn btn-ghost btn-sm btn-square text-success',
+                  title: 'Mark as done',
+                  form: { 'data-turbo-stream': true } do %>
+      <i class="bi bi-check-lg text-lg"></i>
+    <% end %>
+  </div>
 </li>

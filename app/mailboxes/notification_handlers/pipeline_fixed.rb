@@ -33,7 +33,7 @@ module NotificationHandlers
 
       {
         reason: :pipeline_fixed,
-        title: title_parts.join(' \u2013 '),
+        title: title_parts.join(" \u2013 "),
         repo: repo,
         summary: build_summary(pipeline_id, branch),
         link: pipeline_link(pipeline_id)
@@ -64,7 +64,7 @@ module NotificationHandlers
     def build_summary(pipeline_id, branch)
       parts = ["Pipeline ##{pipeline_id} fixed"]
       parts << branch if branch.present?
-      parts.join(' \u2013 ')
+      parts.join(" \u2013 ")
     end
 
     def pipeline_link(pipeline_id)

@@ -32,7 +32,7 @@ module NotificationHandlers
 
       {
         reason: :pipeline_failed,
-        title: title_parts.join(' \u2013 '),
+        title: title_parts.join(" \u2013 "),
         repo: repo,
         summary: build_summary(pipeline_id, branch),
         link: pipeline_link(pipeline_id)
@@ -64,7 +64,7 @@ module NotificationHandlers
       parts = ["Pipeline ##{pipeline_id} failed"]
       parts << branch if branch.present?
       parts << extract_failed_job_info if extract_failed_job_info.present?
-      parts.join(' \u2013 ')
+      parts.join(" \u2013 ")
     end
 
     # Extracts "Stage: lint / Name: job-name" from the body.

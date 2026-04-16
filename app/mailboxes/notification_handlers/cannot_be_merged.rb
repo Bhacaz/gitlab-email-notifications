@@ -33,7 +33,7 @@ module NotificationHandlers
         reason: :cannot_be_merged,
         title: "!#{mr_iid} cannot be merged",
         repo: repo,
-        summary: summary_parts.join(' \u2013 '),
+        summary: summary_parts.join(" \u2013 "),
         link: mr_link
       }
     end
