@@ -7,8 +7,10 @@
 # Ignore bundler config.
 /.bundle
 
-# Ignore all environment files.
+# Ignore all environment files (but keep the example template).
 /.env*
+!/.env.example
+!/.env.test
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -41,6 +43,5 @@
 
 # Ignore key files for decrypting credentials and more.
 /config/credentials/*.key
-!/config/credentials/test.key
 
 .playwright-mcp

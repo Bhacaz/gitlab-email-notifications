@@ -12,7 +12,7 @@ module Dev
       'confirmation_second.eml' => 'Email confirmation (second)',
       'pipeline_failed.eml' => 'Pipeline failed',
       'pipeline_fixed.eml' => 'Pipeline fixed',
-      'mr_discussion_1.eml' => 'MR discussion – inline diff on mos-fhir-event.module.ts (MR !199)',
+      'mr_discussion_1.eml' => 'MR discussion – inline diff on app.module.ts (MR !199)',
       'mr_discussion_2.eml' => 'MR discussion – inline diff on environment.ts (MR !199)',
       'mr_comment_1.eml' => 'MR comment – top-level review comment (MR !199)'
     }.freeze

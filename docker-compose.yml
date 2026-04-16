@@ -1,0 +1,31 @@
+services:
+  web:
+    image: ghcr.io/bhacaz/gitlab-email-notifications:latest
+    container_name: gitlab_email_notifications
+    restart: unless-stopped
+    ports:
+      # Expose the web interface on port 80 (or change as needed)
+      - "80:80"
+    environment:
+      # Generate with: bin/rails secret or any 128-character random string
+      - SECRET_KEY_BASE=
+
+      # GitLab OAuth Application (https://gitlab.com/-/profile/applications)
+      - GITLAB__APP_ID=
+      - GITLAB__APP_SECRET=
+      - GITLAB__CALLBACK_URL=
+
+      # Custom email domain configured in Mailgun
+      - EMAIL_DOMAIN=
+
+      # Mailgun HTTP webhook signing key (from Mailgun → API Security)
+      - MAILGUN_INGRESS_SIGNING_KEY=
+
+      # Admin panel basic auth (/admin/errors, /admin/apm, /admin/jobs)
+      - ADMIN__USERNAME=
+      - ADMIN__PASSWORD=
+    volumes:
+      - storage:/rails/storage
+
+volumes:
+  storage:

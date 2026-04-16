@@ -34,3 +34,7 @@ RSpec/MultipleExpectations:
 
 RSpec/NestedGroups:
   Max: 5
+
+Metrics/BlockLength:
+  Exclude:
+    - config/environments/*.rb
