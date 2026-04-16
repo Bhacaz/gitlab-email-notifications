@@ -74,7 +74,11 @@ module NotificationHandlers
       end
 
       # "Name verb …" — actor-first patterns (commented, started, pushed, was added)
+      # First try title-case names (most common), then fall back to any word(s) before verb.
       if (m = line.match(/\A((?:[A-Z]\S* )+(?:[A-Z]\S*))\s+(commented|started|pushed|was added)/))
+        return m[1].strip
+      end
+      if (m = line.match(/\A(\S+(?:\s+\S+)*?)\s+(commented|started|pushed|was added)\b/))
         return m[1].strip
       end
 
