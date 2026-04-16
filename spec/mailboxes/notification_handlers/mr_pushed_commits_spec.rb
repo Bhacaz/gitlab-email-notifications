@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-# Specs for NotificationHandlers::CannotBeMerged
+# Specs for NotificationHandlers::MrPushedCommits
 #
 # Fixture:
-#   cannot_be_merged.eml  – "Merge request !199 can no longer be merged" notification
+#   mr_pushed_commits.eml  – "pushed new commits to merge request" notification on MR !199
 
-RSpec.describe NotificationHandlers::CannotBeMerged do
+RSpec.describe NotificationHandlers::MrPushedCommits do
   include ActionMailbox::TestHelper
 
   let(:user) do
@@ -27,27 +27,11 @@ RSpec.describe NotificationHandlers::CannotBeMerged do
   # ------------------------------------------------------------------
 
   describe '.matches?' do
-    context 'with a cannot_be_merged fixture' do
-      let(:mail) { receive_inbound_email_from_fixture('cannot_be_merged.eml').mail }
+    context 'with a pushed_commits fixture' do
+      let(:mail) { receive_inbound_email_from_fixture('mr_pushed_commits.eml').mail }
 
       it 'returns true' do
         expect(described_class.matches?(mail)).to be true
-      end
-    end
-
-    context 'with an approved fixture' do
-      let(:mail) { receive_inbound_email_from_fixture('mr_approved.eml').mail }
-
-      it 'returns false' do
-        expect(described_class.matches?(mail)).to be false
-      end
-    end
-
-    context 'with a reviewed fixture' do
-      let(:mail) { receive_inbound_email_from_fixture('mr_reviewed.eml').mail }
-
-      it 'returns false' do
-        expect(described_class.matches?(mail)).to be false
       end
     end
 
@@ -69,11 +53,11 @@ RSpec.describe NotificationHandlers::CannotBeMerged do
   end
 
   # ------------------------------------------------------------------
-  # Fixture: cannot_be_merged.eml
+  # Fixture: mr_pushed_commits.eml
   # ------------------------------------------------------------------
 
-  describe 'cannot_be_merged.eml – conflict notification' do
-    subject(:inbound_email) { receive_inbound_email_from_fixture('cannot_be_merged.eml') }
+  describe 'mr_pushed_commits.eml' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_pushed_commits.eml') }
 
     before { user }
 
@@ -85,9 +69,9 @@ RSpec.describe NotificationHandlers::CannotBeMerged do
       expect { inbound_email }.to change { user.notifications.count }.by(1)
     end
 
-    it 'sets reason to cannot_be_merged' do
+    it 'sets reason to pushed_commits' do
       inbound_email
-      expect(user.notifications.last.reason).to eq('cannot_be_merged')
+      expect(user.notifications.last.reason).to eq('pushed_commits')
     end
 
     it 'captures the merge request link' do
@@ -105,9 +89,10 @@ RSpec.describe NotificationHandlers::CannotBeMerged do
       expect(user.notifications.last.summary).to include('MR !199')
     end
 
-    it 'includes the conflict phrase in the summary' do
+    it 'builds a title with the actor and IID' do
       inbound_email
-      expect(user.notifications.last.summary).to include('has a conflict')
+      expect(user.notifications.last.title).to include('A Reviewer')
+      expect(user.notifications.last.title).to include('!199')
     end
 
     it 'stores the unsubscribe link from the List-Unsubscribe header' do

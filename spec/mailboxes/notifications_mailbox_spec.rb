@@ -427,4 +427,84 @@ RSpec.describe NotificationsMailbox do
       expect(user.notifications.last.reason).to eq('cannot_be_merged')
     end
   end
+
+  # ------------------------------------------------------------------
+  # Discussions resolved
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_discussions_resolved_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'discussions resolved email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_discussions_resolved.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason discussions_resolved' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('discussions_resolved')
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # Reviewer added
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_reviewer_added_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'reviewer added email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_reviewer_added.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason reviewer_added' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('reviewer_added')
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # Pushed commits
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_pushed_commits_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'pushed commits email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_pushed_commits.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason pushed_commits' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('pushed_commits')
+    end
+  end
+
+  # ------------------------------------------------------------------
+  # MR reassigned
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_reassigned_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'MR reassigned email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('mr_reassigned.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason mr_reassigned' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('mr_reassigned')
+    end
+  end
 end

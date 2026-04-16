@@ -13,4 +13,7 @@ X-GitLab-Project-Path: my-group/my-project
 
 Pipeline #1111111111 failed.
 
+Stage: build
+Name: test-job
+
 https://gitlab.example.com/my-group/my-project/-/pipelines/1111111111

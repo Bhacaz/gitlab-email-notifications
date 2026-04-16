@@ -90,9 +90,20 @@ RSpec.describe NotificationHandlers::MrDiscussion do
       expect(user.notifications.last.summary).to include('MR !199')
     end
 
-    it 'includes the action phrase in the summary' do
+    it 'includes "New discussion" in the summary' do
       inbound_email
-      expect(user.notifications.last.summary).to include('started a new discussion')
+      expect(user.notifications.last.summary).to include('New discussion')
+    end
+
+    it 'includes the filename in the summary' do
+      inbound_email
+      expect(user.notifications.last.summary).to include('some-file.ts')
+    end
+
+    it 'builds a title with the actor and IID' do
+      inbound_email
+      expect(user.notifications.last.title).to include('A Reviewer')
+      expect(user.notifications.last.title).to include('!199')
     end
 
     it 'stores the unsubscribe link from the List-Unsubscribe header' do
@@ -143,9 +154,14 @@ RSpec.describe NotificationHandlers::MrDiscussion do
       expect(user.notifications.last.summary).to include('MR !199')
     end
 
-    it 'includes the action phrase in the summary' do
+    it 'includes "New discussion" in the summary' do
       inbound_email
-      expect(user.notifications.last.summary).to include('started a new discussion')
+      expect(user.notifications.last.summary).to include('New discussion')
+    end
+
+    it 'includes the filename in the summary' do
+      inbound_email
+      expect(user.notifications.last.summary).to include('another-file.ts')
     end
 
     it 'stores the unsubscribe link from the List-Unsubscribe header' do
