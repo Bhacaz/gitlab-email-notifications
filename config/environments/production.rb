@@ -87,7 +87,7 @@ Rails.application.configure do
   # Make environment variables required in production.
   # Skip runtime-only env enforcement during build/asset precompile, where
   # `SECRET_KEY_BASE_DUMMY=1` is commonly used and these settings are not needed.
-  unless ENV['SECRET_KEY_BASE_DUMMY'].present?
+  if ENV['SECRET_KEY_BASE_DUMMY'].blank?
     required_env = lambda do |key|
       ENV.fetch(key).presence || raise(KeyError, "#{key} is required and cannot be blank")
     end
