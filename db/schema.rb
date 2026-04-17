@@ -88,7 +88,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_17_005632) do
     t.string "p256dh"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
-    t.index ["user_id"], name: "index_push_subscriptions_on_user_id"
+    t.index ["user_id", "endpoint"], name: "index_push_subscriptions_on_user_id_and_endpoint", unique: true
   end
 
   create_table "users", force: :cascade do |t|

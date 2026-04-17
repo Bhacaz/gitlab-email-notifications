@@ -38,3 +38,4 @@ RSpec/NestedGroups:
 Metrics/BlockLength:
   Exclude:
     - config/environments/*.rb
+    - config/routes.rb

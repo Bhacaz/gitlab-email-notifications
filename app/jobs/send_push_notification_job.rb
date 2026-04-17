@@ -4,36 +4,51 @@ class SendPushNotificationJob < ApplicationJob
   queue_as :default
 
   def perform(notification_id)
+    return unless vapid_configured?
+
     notification = Notification.find_by(id: notification_id)
     return unless notification
+    return if notification.user.push_subscriptions.empty?
 
-    user = notification.user
-    return if user.push_subscriptions.empty?
+    send_to_all(notification)
+  end
 
-    payload = {
+  private
+
+  def vapid_configured?
+    Rails.application.config.x.vapid.public_key.present? &&
+      Rails.application.config.x.vapid.private_key.present?
+  end
+
+  def vapid
+    {
+      public_key: Rails.application.config.x.vapid.public_key,
+      private_key: Rails.application.config.x.vapid.private_key,
+      subject: "mailto:#{Rails.application.config.email_domain || 'push@example.com'}"
+    }
+  end
+
+  def build_payload(notification)
+    {
       title: notification.title.presence || notification.reason_display_name,
       body: notification.repo.presence || '',
       path: Rails.application.routes.url_helpers.notification_path(notification)
     }.to_json
+  end
 
-    vapid = {
-      public_key: ENV.fetch('VAPID_PUBLIC_KEY'),
-      private_key: ENV.fetch('VAPID_PRIVATE_KEY'),
-      subject: "mailto:#{ENV.fetch('VAPID_SUBJECT', 'push@example.com')}"
-    }
-
-    user.push_subscriptions.find_each do |sub|
-      WebPush.payload_send(
-        message: payload,
-        endpoint: sub.endpoint,
-        p256dh: sub.p256dh,
-        auth: sub.auth,
-        vapid: vapid
-      )
-    rescue WebPush::ExpiredSubscription, WebPush::InvalidSubscription
-      sub.destroy
-    rescue WebPush::Error => e
-      Rails.logger.error("[SendPushNotificationJob] WebPush error for sub #{sub.id}: #{e.message}")
+  def send_to_all(notification)
+    payload = build_payload(notification)
+    notification.user.push_subscriptions.find_each do |sub|
+      deliver(sub, payload)
     end
+  end
+
+  def deliver(sub, payload)
+    WebPush.payload_send(message: payload, endpoint: sub.endpoint,
+                         p256dh: sub.p256dh, auth: sub.auth, vapid: vapid)
+  rescue WebPush::ExpiredSubscription, WebPush::InvalidSubscription
+    sub.destroy
+  rescue WebPush::Error => e
+    Rails.logger.error("[SendPushNotificationJob] WebPush error for sub #{sub.id}: #{e.message}")
   end
 end

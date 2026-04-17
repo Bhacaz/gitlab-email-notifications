@@ -53,5 +53,7 @@ module GitlabEmailNotifications
     config.x.gitlab.callback_url    = ENV.fetch('GITLAB__CALLBACK_URL', nil)
     config.x.admin.username         = ENV.fetch('ADMIN__USERNAME', nil)
     config.x.admin.password         = ENV.fetch('ADMIN__PASSWORD', nil)
+    config.x.vapid.public_key       = ENV.fetch('VAPID__PUBLIC_KEY', nil)
+    config.x.vapid.private_key      = ENV.fetch('VAPID__PRIVATE_KEY', nil)
   end
 end
