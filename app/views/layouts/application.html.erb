@@ -74,19 +74,29 @@
       </div>
     </nav>
 
-    <% if notice.present? %>
-      <div class="alert alert-success fixed top-16 left-1/2 -translate-x-1/2 z-50 w-auto max-w-lg shadow-lg mt-2">
-        <i class="bi bi-check-circle"></i>
-        <%= notice %>
-      </div>
-    <% end %>
+    <div class="toast toast-end toast-bottom z-50">
+      <% if notice.present? %>
+        <div role="alert" class="alert alert-success shadow-lg transition-all duration-300"
+             data-controller="flash">
+          <i class="bi bi-check-circle"></i>
+          <span><%= notice %></span>
+          <button type="button" class="btn btn-ghost btn-xs" data-action="flash#dismiss">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      <% end %>
 
-    <% if alert.present? %>
-      <div class="alert alert-error fixed top-16 left-1/2 -translate-x-1/2 z-50 w-auto max-w-lg shadow-lg mt-2">
-        <i class="bi bi-exclamation-triangle"></i>
-        <%= alert %>
-      </div>
-    <% end %>
+      <% if alert.present? %>
+        <div role="alert" class="alert alert-error shadow-lg transition-all duration-300"
+             data-controller="flash">
+          <i class="bi bi-exclamation-triangle"></i>
+          <span><%= alert %></span>
+          <button type="button" class="btn btn-ghost btn-xs" data-action="flash#dismiss">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      <% end %>
+    </div>
 
     <main class="container mx-auto mt-20 px-5 flex">
       <%= yield %>
