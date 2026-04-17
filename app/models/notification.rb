@@ -64,6 +64,6 @@ class Notification < ApplicationRecord
   end
 
   def enqueue_push_notification
-    SendPushNotificationJob.perform_later(id)
+    SendPushNotificationJob.perform_later(id) if Rails.application.config.x.vapid&.public_key.present?
   end
 end

@@ -24,7 +24,7 @@ class SendPushNotificationJob < ApplicationJob
     {
       public_key: Rails.application.config.x.vapid.public_key,
       private_key: Rails.application.config.x.vapid.private_key,
-      subject: "mailto:#{Rails.application.config.email_domain || 'push@example.com'}"
+      subject: "mailto:contact@#{Rails.application.config.email_domain}"
     }
   end
 
