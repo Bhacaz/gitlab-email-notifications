@@ -6,15 +6,12 @@ The missing **notification center** that [GitLab doesn't have](https://gitlab.co
 
 It ingests GitLab notification emails via Mailgun and presents them in a unified, filterable inbox.
 Authentication is handled via GitLab OAuth.
-Browser push notifications are delivered via the Web Push API when enabled.
-
 
 ```mermaid
 graph LR
     A[GitLab] -->|Email| B(Mailgun)
     B -->|HTTP Webhook| C[GitLab Email Notifications]
     C -->|GitLab OAuth| A
-    C -->|Web Push| D[Browser]
 ```
 
 ## Quick start with Docker Compose
@@ -108,9 +105,7 @@ cp .env.example .env
 bundle install
 bin/rails db:setup
 bin/rails server
-bin/jobs           # separate terminal — runs Solid Queue for background jobs
 ```
 
 The dev login shortcut at `GET /dev/login` signs you in as the first user in the
 database — no OAuth flow needed for local testing.
-
