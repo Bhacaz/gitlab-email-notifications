@@ -26,7 +26,12 @@ class Notification < ApplicationRecord
 
   scope :visible, -> { where(hidden: false) }
 
+  def reason_display_name
+    REASONS.find { |r| r.name.to_s == reason }&.display_name || reason.to_s.humanize
+  end
+
   after_create_commit :broadcast_new_banner
+  after_create_commit :enqueue_push_notification
 
   def self.sidebar_locals_for(user, active_reason: nil, active_repo: nil)
     base = user.notifications.visible
@@ -56,5 +61,9 @@ class Notification < ApplicationRecord
       partial: 'notifications/new_banner',
       locals: { count: count }
     )
+  end
+
+  def enqueue_push_notification
+    SendPushNotificationJob.perform_later(id)
   end
 end

@@ -7,6 +7,9 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <% if user_signed_in? %>
+      <meta name="vapid-public-key" content="<%= ENV['VAPID_PUBLIC_KEY'] %>">
+    <% end %>
 
     <%= yield :head %>
 
@@ -58,6 +61,14 @@
               </div>
               <div class="divider my-0"></div>
               <ul class="menu menu-sm p-2">
+                <li>
+                  <div data-controller="push-subscription"
+                       data-push-subscription-vapid-public-key-value="<%= ENV['VAPID_PUBLIC_KEY'] %>"
+                       data-action="click->push-subscription#toggle">
+                    <i data-push-subscription-target="icon" class="bi bi-bell-slash"></i>
+                    <span data-push-subscription-target="label">Enable push notifications</span>
+                  </div>
+                </li>
                 <li>
                   <%= button_to sign_out_path, method: :delete, data: { turbo: false }, class: 'w-full' do %>
                     <i class="bi bi-box-arrow-right"></i> Sign out

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_01_143552) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_17_005632) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "message_checksum", null: false
@@ -81,6 +81,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_143552) do
     t.index ["user_id"], name: "index_onboardings_on_user_id", unique: true
   end
 
+  create_table "push_subscriptions", force: :cascade do |t|
+    t.string "auth"
+    t.datetime "created_at", null: false
+    t.text "endpoint"
+    t.string "p256dh"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_push_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "avatar_url"
     t.datetime "created_at", null: false
@@ -99,4 +109,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_143552) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "notifications", "users"
   add_foreign_key "onboardings", "users"
+  add_foreign_key "push_subscriptions", "users"
 end
