@@ -1,0 +1,24 @@
+<div id="notification-list">
+  <% if notifications.any? %>
+    <ul class="list bg-base-200 rounded-box shadow-sm">
+      <li class="p-4 pb-2 text-xs text-base-content/50 tracking-widest uppercase font-semibold flex items-center justify-between">
+        <span>Notifications</span>
+      </li>
+      <%= render notifications %>
+    </ul>
+  <% else %>
+    <div class="flex flex-col items-center justify-center py-24 text-base-content/30">
+      <i class="bi bi-inbox text-5xl mb-4"></i>
+      <% if active_reason.present? || active_repo.present? %>
+        <p class="text-lg font-semibold">No matches</p>
+        <p class="text-sm mt-1">
+          <%= link_to 'Clear filter', root_path, class: 'link link-hover text-base-content/40' %>
+        </p>
+      <% else %>
+        <p class="text-lg font-semibold">All caught up</p>
+        <p class="text-sm mt-1">No visible notifications</p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+

@@ -14,14 +14,16 @@ class NotificationsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.remove("notification_#{@notification.id}"),
+        streams = [
           turbo_stream.replace(
             'notifications-sidebar',
             partial: 'home/sidebar_filters',
             locals: Notification.sidebar_locals_for(current_user)
           )
         ]
+        streams << notification_list_streams
+
+        render turbo_stream: streams
       end
       format.html { redirect_to root_path }
     end
@@ -31,5 +33,18 @@ class NotificationsController < ApplicationController
 
   def set_notification
     @notification = current_user.notifications.find(params[:id])
+  end
+
+  def notification_list_streams
+    remaining = current_user.notifications.visible
+    if remaining.none?
+      turbo_stream.replace(
+        'notification-list',
+        partial: 'home/notification_list',
+        locals: { notifications: remaining, active_reason: nil, active_repo: nil }
+      )
+    else
+      turbo_stream.remove("notification_#{@notification.id}")
+    end
   end
 end
