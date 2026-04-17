@@ -1,5 +1,3 @@
-<%= turbo_stream_from "notifications_new_#{current_user.id}" %>
-
 <div class="w-full flex gap-8 items-start">
 
   <%# ── Sidebar filters ── %>
@@ -14,9 +12,6 @@
 
   <%# ── Notification list ── %>
   <div class="flex-1 min-w-0">
-    <%# New notifications banner — replaced via Turbo Stream on new arrivals %>
-    <div id="new-notifications-banner"></div>
-
     <%= render 'home/notification_list',
           notifications: @notifications,
           active_reason: @active_reason,

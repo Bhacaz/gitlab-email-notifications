@@ -1,8 +1,9 @@
 <% if count.positive? %>
-  <div class="mb-6 text-right">
-    <a href="/" data-turbo-action="replace" data-controller="favicon-alert" class="link link-hover link-info">
-      New notification
-      <i class="bi bi-arrow-clockwise ml-auto"></i>
-    </a>
-  </div>
+  <a href="<%= root_path %>" data-turbo-action="replace" data-controller="favicon-alert"
+     class="btn btn-ghost btn-info btn-sm underline underline-offset-4 gap-2">
+    New notification
+    <i class="bi bi-bell-fill"></i>
+  </a>
+<% else %>
+  <span data-controller="favicon-alert" class="hidden"></span>
 <% end %>

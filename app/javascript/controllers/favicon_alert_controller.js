@@ -6,15 +6,11 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   connect() {
     const favicon = document.getElementById("favicon")
-    if (favicon) {
-      favicon.href = "/favicon-bell-on.svg"
-    }
+    if (favicon) favicon.href = "/favicon-bell-on.svg"
   }
 
   disconnect() {
     const favicon = document.getElementById("favicon")
-    if (favicon) {
-      favicon.href = "/favicon-bell.svg"
-    }
+    if (favicon) favicon.href = "/favicon-bell.svg"
   }
 }

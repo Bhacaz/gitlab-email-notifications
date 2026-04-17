@@ -22,6 +22,10 @@
   </head>
 
   <body>
+    <% if user_signed_in? %>
+      <%= turbo_stream_from "notifications_new_#{current_user.id}" %>
+    <% end %>
+
     <nav class="navbar bg-base-100 shadow-sm fixed top-0 z-50 w-full px-4">
       <div class="flex-1">
         <a href="<%= root_path %>" class="btn btn-ghost text-xl">
@@ -31,6 +35,7 @@
       </div>
       <div class="flex-none">
         <% if user_signed_in? %>
+          <div id="new-notifications-banner"></div>
           <div class="dropdown dropdown-end">
             <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
               <div class="w-10 rounded-full">
