@@ -56,7 +56,7 @@ export default class extends Controller {
 
       if (!response.ok) {
         await sub.unsubscribe()
-        throw new Error(`Server rejected subscription (${response.status})`)
+        throw new Error(`Server rejected subscription (${response.statusCode})`)
       }
 
       this.subscribedValue = true
@@ -78,17 +78,21 @@ export default class extends Controller {
       const registration = await navigator.serviceWorker.ready
       const sub = await registration.pushManager.getSubscription()
       if (sub) {
-        const endpoint = sub.endpoint
-        await sub.unsubscribe()
-        await destroy("/push_subscription", {
-          body: JSON.stringify({ endpoint }),
+        const response = await destroy("/push_subscription", {
+          body: JSON.stringify({ endpoint: sub.endpoint }),
           contentType: "application/json"
         })
+        if (!response.ok) {
+          alert(`Could not disable push notifications (${response.statusCode})`)
+          return
+        }
+        await sub.unsubscribe()
       }
       this.subscribedValue = false
       this.#updateUI()
     } catch (err) {
       console.error("Push unsubscribe error:", err)
+      alert("Could not disable push notifications: " + err.message)
     }
   }
 
