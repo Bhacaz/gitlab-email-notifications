@@ -16,8 +16,7 @@ class SendPushNotificationJob < ApplicationJob
   private
 
   def vapid_configured?
-    Rails.application.config.x.vapid.public_key.present? &&
-      Rails.application.config.x.vapid.private_key.present?
+    Rails.application.config.x.web_push.enabled?
   end
 
   def vapid

@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <% if user_signed_in? && Rails.application.config.x.vapid&.public_key.present? %>
+    <% if user_signed_in? && Rails.application.config.x.web_push.enabled? %>
       <meta name="vapid-public-key" content="<%= Rails.application.config.x.vapid&.public_key %>">
     <% end %>
 
@@ -61,7 +61,7 @@
               </div>
               <div class="divider my-0"></div>
               <ul class="menu menu-sm p-2">
-                <% if Rails.application.config.x.vapid&.public_key.present? %>
+                <% if Rails.application.config.x.web_push.enabled? %>
                   <li>
                     <button type="button"
                             class="w-full text-left"

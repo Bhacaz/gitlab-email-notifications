@@ -44,7 +44,7 @@ export default class extends Controller {
       })
 
       const json = sub.toJSON()
-      await post("/push_subscription", {
+      const response = await post("/push_subscription", {
         body: JSON.stringify({
           push_subscription: {
             endpoint: json.endpoint,
@@ -53,6 +53,11 @@ export default class extends Controller {
         }),
         contentType: "application/json"
       })
+
+      if (!response.ok) {
+        await sub.unsubscribe()
+        throw new Error(`Server rejected subscription (${response.status})`)
+      }
 
       this.subscribedValue = true
       this.#updateUI()
