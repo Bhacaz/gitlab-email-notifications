@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PushSubscriptionsController < ApplicationController
-
   def create
     endpoint = subscription_params[:endpoint]
     keys     = subscription_params[:keys] || {}
