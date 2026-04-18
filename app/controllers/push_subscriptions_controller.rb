@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PushSubscriptionsController < ApplicationController
-  before_action :require_login
 
   def create
     endpoint = subscription_params[:endpoint]
