@@ -8,7 +8,6 @@ class SendPushNotificationJob < ApplicationJob
 
     notification = Notification.find_by(id: notification_id)
     return unless notification
-    return if notification.user.push_subscriptions.empty?
 
     send_to_all(notification)
   end
