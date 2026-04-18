@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :push_subscription, only: %i[create destroy]
+
   # OmniAuth GitLab OAuth routes
   get '/sign_in', to: 'sessions#new', as: :sign_in
   get '/oauth/gitlab/callback', to: 'sessions#create'
@@ -26,7 +28,7 @@ Rails.application.routes.draw do
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   get 'manifest' => 'rails/pwa#manifest', as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get 'service-worker' => 'rails/pwa#service_worker', as: :pwa_service_worker
 
   if Rails.env.development?
     get  '/dev/login',            to: 'dev/sessions#create',   as: :dev_login

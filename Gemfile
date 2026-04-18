@@ -84,3 +84,6 @@ group :test do
 end
 
 gem 'solid_errors', '~> 0.7.0'
+
+# Web Push notifications
+gem 'web-push'

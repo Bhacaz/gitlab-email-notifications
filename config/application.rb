@@ -46,12 +46,18 @@ module GitlabEmailNotifications
 
     # Load configuration from environment variables.
     # In development/test, set these in a .env file (see .env.example).
-    # In production, inject them via Docker environment or your hosting platform.
-    config.email_domain             = ENV.fetch('EMAIL_DOMAIN', nil)
-    config.x.gitlab.application_id  = ENV.fetch('GITLAB__APP_ID', nil)
-    config.x.gitlab.secret_id       = ENV.fetch('GITLAB__APP_SECRET', nil)
-    config.x.gitlab.callback_url    = ENV.fetch('GITLAB__CALLBACK_URL', nil)
-    config.x.admin.username         = ENV.fetch('ADMIN__USERNAME', nil)
-    config.x.admin.password         = ENV.fetch('ADMIN__PASSWORD', nil)
+    # In production, inject them via Docker environment or your hosting platform
+    # and required ones will be validated on boot.
+    config.email_domain             = ENV.fetch('EMAIL_DOMAIN', nil).presence
+    config.x.gitlab.application_id  = ENV.fetch('GITLAB__APP_ID', nil).presence
+    config.x.gitlab.secret_id       = ENV.fetch('GITLAB__APP_SECRET', nil).presence
+    config.x.gitlab.callback_url    = ENV.fetch('GITLAB__CALLBACK_URL', nil).presence
+    config.x.admin.username         = ENV.fetch('ADMIN__USERNAME', nil).presence
+    config.x.admin.password         = ENV.fetch('ADMIN__PASSWORD', nil).presence
+    config.x.vapid.public_key       = ENV.fetch('VAPID__PUBLIC_KEY', nil).presence
+    config.x.vapid.private_key      = ENV.fetch('VAPID__PRIVATE_KEY', nil).presence
+    config.x.web_push               = ActiveSupport::StringInquirer.new(
+      config.x.vapid.public_key.present? && config.x.vapid.private_key.present? ? 'enabled' : 'disabled'
+    )
   end
 end

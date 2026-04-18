@@ -7,7 +7,6 @@ The missing **notification center** that [GitLab doesn't have](https://gitlab.co
 It ingests GitLab notification emails via Mailgun and presents them in a unified, filterable inbox.
 Authentication is handled via GitLab OAuth.
 
-
 ```mermaid
 graph LR
     A[GitLab] -->|Email| B(Mailgun)
@@ -22,20 +21,24 @@ Just fill in the environment variables.
 
 ## Environment variables
 
-All configuration is done via environment variables. 
+All configuration is done via environment variables.
 Set them in `.env` for local development, or pass them directly in `docker-compose.yml`
 / your hosting platform for production.
 
-| Variable | Required | Description                                                                                                               |
-|---|---|---------------------------------------------------------------------------------------------------------------------------|
-| `SECRET_KEY_BASE` | Yes | Random secret for cookies and encrypted tokens. Generate with `bin/rails secret` <br> or any 128-character random string. |
-| `GITLAB__APP_ID` | Yes | OAuth Application ID from GitLab.                                                                                         |
-| `GITLAB__APP_SECRET` | Yes | OAuth Application Secret from GitLab.                                                                                     |
-| `GITLAB__CALLBACK_URL` | Yes | Full URL to `https://example.com/oauth/gitlab/callback` on your domain.                                                   |
-| `EMAIL_DOMAIN` | Yes | The custom domain configured in Mailgun (e.g. `gitlab.example.com`).                                                      |
-| `MAILGUN_INGRESS_SIGNING_KEY` | Yes | HTTP webhook signing key from Mailgun API Security. Read automatically by Action Mailbox.                                 |
-| `ADMIN__USERNAME` | Yes | Username for the admin panel (HTTP Basic Auth).                                                                           |
-| `ADMIN__PASSWORD` | Yes | Password for the admin panel (HTTP Basic Auth).                                                                           |
+| Variable | Required | Description |
+|---|---|---|
+| `SECRET_KEY_BASE` | Yes | Random secret for cookies and encrypted tokens. Generate with `bin/rails secret` or any 128-character random string. |
+| `GITLAB__APP_ID` | Yes | OAuth Application ID from GitLab. |
+| `GITLAB__APP_SECRET` | Yes | OAuth Application Secret from GitLab. |
+| `GITLAB__CALLBACK_URL` | Yes | Full URL to `https://example.com/oauth/gitlab/callback` on your domain. |
+| `EMAIL_DOMAIN` | Yes | The custom domain configured in Mailgun (e.g. `gitlab.example.com`). |
+| `MAILGUN_INGRESS_SIGNING_KEY` | Yes | HTTP webhook signing key from Mailgun API Security. Read automatically by Action Mailbox. |
+| `ADMIN__USERNAME` | Yes | Username for the admin panel (HTTP Basic Auth). |
+| `ADMIN__PASSWORD` | Yes | Password for the admin panel (HTTP Basic Auth). |
+| `VAPID__PUBLIC_KEY` | No | Web Push VAPID public key. Required to enable browser push notifications. |
+| `VAPID__PRIVATE_KEY` | No | Web Push VAPID private key. Required to enable browser push notifications. |
+
+> **Note:** Push notifications are silently disabled when `VAPID__PUBLIC_KEY` / `VAPID__PRIVATE_KEY` are not set.
 
 ## GitLab OAuth Application
 
@@ -60,6 +63,24 @@ Set them in `.env` for local development, or pass them directly in `docker-compo
 In GitLab, configure your notification emails to go to
 `<user-prefix>@gitlab.example.com`. Each user's personal forwarding address is
 shown in the onboarding flow after sign-in.
+
+## Web Push notifications (optional)
+
+Users can opt in to browser push notifications from the avatar menu. Each new
+incoming notification triggers a push via the Web Push API.
+
+**Setup:**
+
+1. Generate a VAPID key pair (one-time, store the output in `.env`):
+   ```sh
+   bundle exec ruby -e "require 'web-push'; k = WebPush.generate_key; puts 'VAPID__PUBLIC_KEY=' + k.public_key; puts 'VAPID__PRIVATE_KEY=' + k.private_key"
+   ```
+2. Add both values to your environment.
+3. Restart the server and the background job worker.
+
+> **Brave browser:** Brave's privacy shields block Google's FCM push service by
+> default. Enable **"Use Google services for push messaging"** in
+> `brave://settings/privacy`, or use Chrome / Firefox.
 
 ## Admin panel
 

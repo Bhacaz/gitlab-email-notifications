@@ -6,6 +6,7 @@ class User < ApplicationRecord
   validates :email_prefix, presence: true, uniqueness: true
 
   has_many :notifications, dependent: :destroy
+  has_many :push_subscriptions, dependent: :destroy
   has_one :onboarding, dependent: :destroy
 
   before_validation :init_email_prefix, on: :create

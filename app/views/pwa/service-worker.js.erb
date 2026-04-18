@@ -1,0 +1,46 @@
+self.addEventListener("install", () => self.skipWaiting())
+self.addEventListener("activate", (event) => event.waitUntil(clients.claim()))
+
+self.addEventListener("push", async (event) => {
+  let data = {}
+  if (event.data) {
+    try {
+      data = event.data.json()
+    } catch (_) {
+      data = { title: event.data.text() }
+    }
+  }
+  const title = data.title || "New notification"
+  const options = {
+    body: data.body || "",
+    icon: "/icon.png",
+    badge: "/favicon-bell.svg",
+    data: { path: data.path || "/" }
+  }
+  event.waitUntil(self.registration.showNotification(title, options))
+})
+
+self.addEventListener("notificationclick", function(event) {
+  event.notification.close()
+  const path = (event.notification.data && event.notification.data.path) ? event.notification.data.path : "/"
+  const targetUrl = self.location.origin + path
+
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+      // Look for an already-open tab at the exact URL
+      for (const client of clientList) {
+        if (client.url === targetUrl && "focus" in client) {
+          return client.focus()
+        }
+      }
+      // No matching tab — look for any focusable tab and navigate it
+      for (const client of clientList) {
+        if ("focus" in client && "navigate" in client) {
+          return client.focus().then(() => client.navigate(targetUrl))
+        }
+      }
+      // No open tab at all — open a new one
+      return clients.openWindow(targetUrl)
+    })
+  )
+})
