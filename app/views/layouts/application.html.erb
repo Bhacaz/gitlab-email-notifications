@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="dim" lang="en">
+<html lang="en">
   <head>
     <title><%= content_for(:title) || Rails.app_class.name.split('::').first %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -17,6 +17,19 @@
 
     <link rel="icon" id="favicon" href="/favicon-bell.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Set theme before paint to avoid flash %>
+    <script>
+      (function() {
+        var theme = localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dim" : "pastel");
+        document.documentElement.setAttribute("data-theme", theme);
+        document.addEventListener("DOMContentLoaded", function() {
+          var icon = document.querySelector("[data-theme-target='icon']");
+          if (icon) icon.className = theme === "dim" ? "bi bi-sun" : "bi bi-moon-stars";
+        });
+      })();
+    </script>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag 'tailwind', 'data-turbo-track': 'reload' %>
@@ -60,7 +73,7 @@
                 <p class="text-xs text-base-content/50 truncate"><%= current_user.notification_email %></p>
               </div>
               <div class="divider my-0"></div>
-              <ul class="menu menu-sm p-2">
+              <ul class="menu menu-sm p-2" data-controller="theme">
                 <% if Rails.application.config.x.web_push.enabled? %>
                   <li>
                     <button type="button"
@@ -73,6 +86,12 @@
                     </button>
                   </li>
                 <% end %>
+                <li>
+                  <button type="button" class="w-full text-left" data-action="click->theme#toggle">
+                    <i data-theme-target="icon" class="bi bi-moon-stars"></i>
+                    Toggle theme
+                  </button>
+                </li>
                 <li>
                   <%= button_to sign_out_path, method: :delete, data: { turbo: false }, class: 'w-full' do %>
                     <i class="bi bi-box-arrow-right"></i> Sign out
