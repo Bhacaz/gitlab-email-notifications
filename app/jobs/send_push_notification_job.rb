@@ -30,17 +30,17 @@ class SendPushNotificationJob < ApplicationJob
   def build_payload(notification)
     url = Rails.application.routes.url_helpers.notification_path(notification)
     JSON.generate({
-      title: "GitLab - #{notification.title.presence || notification.reason_display_name}",
-      options: {
-        body: notification.repo.presence || '',
-        icon: '/gitlab.png',
-        data: {
-          url: url,
-          path: url
-          # badge: @badge
-        }
-      }
-    })
+                    title: "GitLab - #{notification.title.presence || notification.reason_display_name}",
+                    options: {
+                      body: notification.repo.presence || '',
+                      icon: '/gitlab.png',
+                      data: {
+                        url: url,
+                        path: url
+                        # badge: @badge
+                      }
+                    }
+                  })
   end
 
   def send_to_all(notification)
