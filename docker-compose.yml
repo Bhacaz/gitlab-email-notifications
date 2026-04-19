@@ -21,6 +21,10 @@ services:
       # Mailgun HTTP webhook signing key (from Mailgun → API Security)
       - MAILGUN_INGRESS_SIGNING_KEY=
 
+      # Browser push notifications.
+      - VAPID__PUBLIC_KEY=
+      - VAPID__PRIVATE_KEY=
+
       # Admin panel basic auth (/admin/errors, /admin/apm, /admin/jobs)
       - ADMIN__USERNAME=
       - ADMIN__PASSWORD=
