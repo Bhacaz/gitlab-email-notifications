@@ -31,7 +31,8 @@ class SendPushNotificationJob < ApplicationJob
     {
       title: notification.title.presence || notification.reason_display_name,
       body: notification.repo.presence || '',
-      path: Rails.application.routes.url_helpers.notification_path(notification)
+      path: Rails.application.routes.url_helpers.notification_path(notification),
+      icon: 'https://about.gitlab.com/images/press/gitlab-logo-500-rgb.png'
     }.to_json
   end
 
