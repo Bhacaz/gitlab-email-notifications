@@ -12,6 +12,6 @@ class AddStatusToNotifications < ActiveRecord::Migration[8.1]
       end
     end
 
-    remove_column :notifications, :hidden
+    remove_column :notifications, :hidden, :boolean
   end
 end
