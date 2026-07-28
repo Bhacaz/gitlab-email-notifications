@@ -3,27 +3,34 @@
 class HomeController < ApplicationController
   def index
     base = current_user.notifications.visible
+    build_sidebar(base)
+    @notifications = apply_filters(base).order(created_at: :desc)
+    @active_reason = params[:reason]
+    @active_repo   = params[:repo]
+    @active_status = params[:status]
+  end
 
-    # Build sidebar facet data from the full unfiltered set
+  private
+
+  def build_sidebar(base)
     @all_count = base.count
     reason_counts = base.group(:reason).count
-    @reasons     = Notification::REASONS
-                   .to_h { |r| [r.name.to_s, reason_counts.fetch(r.name.to_s, 0)] }
-                   .select { |_, c| c.positive? }
-    @repos       = base.where.not(repo: nil).group(:repo).count.sort_by { |_, c| -c }
-    statuses     = base.group(:status).count
-    @new_count   = statuses.fetch('new', 0)
-    @seen_count  = statuses.fetch('seen', 0)
+    @reasons = Notification::REASONS
+               .to_h { |r| [r.name.to_s, reason_counts.fetch(r.name.to_s, 0)] }
+               .select { |_, c| c.positive? }
+    @repos = base.where.not(repo: nil).group(:repo).count.sort_by { |_, c| -c }
+    statuses = base.group(:status).count
+    @new_count = statuses.fetch('new', 0)
+    @seen_count = statuses.fetch('seen', 0)
+  end
 
-    # Apply filters from params
+  def apply_filters(base)
     scope = base
     scope = scope.where(reason: params[:reason]) if params[:reason].present?
     scope = scope.where(repo: params[:repo])     if params[:repo].present?
-    scope = scope.where(status: params[:status]) if params[:status].present? && Notification.statuses.key?(params[:status])
-
-    @notifications   = scope.order(created_at: :desc)
-    @active_reason   = params[:reason]
-    @active_repo     = params[:repo]
-    @active_status   = params[:status]
+    if params[:status].present? && Notification.statuses.key?(params[:status])
+      scope = scope.where(status: params[:status])
+    end
+    scope
   end
 end
