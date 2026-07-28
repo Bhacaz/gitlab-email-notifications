@@ -24,7 +24,11 @@ class Notification < ApplicationRecord
        REASONS.to_h { |reason| [reason.name, reason.value] },
        prefix: true
 
-  scope :visible, -> { where(hidden: false) }
+  enum :status, { new: 0, seen: 1, done: 2 }, prefix: true
+
+  scope :visible, -> { where.not(status: :done) }
+  scope :new_status, -> { where(status: :new) }
+  scope :old, -> { where(status: :seen) }
 
   def reason_display_name
     REASONS.find { |r| r.name.to_s == reason }&.display_name || reason.to_s.humanize
@@ -32,6 +36,7 @@ class Notification < ApplicationRecord
 
   after_create_commit :broadcast_new_banner
   after_create_commit :enqueue_push_notification
+  after_update_commit :broadcast_seen, if: -> { status_previously_was == 'new' && status_seen? }
 
   def self.sidebar_locals_for(user, active_reason: nil, active_repo: nil)
     base = user.notifications.visible
@@ -67,5 +72,14 @@ class Notification < ApplicationRecord
     return unless Rails.application.config.x.web_push.enabled? && user.push_subscriptions.exists?
 
     SendPushNotificationJob.perform_later(id)
+  end
+
+  def broadcast_seen
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "notifications_#{user_id}",
+      target: "notification_#{id}",
+      partial: 'notifications/notification',
+      locals: { notification: self }
+    )
   end
 end

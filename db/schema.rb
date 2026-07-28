@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_17_005632) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_28_145845) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "message_checksum", null: false
@@ -57,11 +57,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_17_005632) do
 
   create_table "notifications", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.boolean "hidden", default: false, null: false
     t.string "link"
     t.string "message_id", null: false
     t.integer "reason", limit: 1, default: 0
     t.string "repo"
+    t.integer "status", default: 0, null: false
     t.string "summary"
     t.string "title"
     t.string "unsubscribe_link"

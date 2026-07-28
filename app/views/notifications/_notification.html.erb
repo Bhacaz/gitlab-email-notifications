@@ -1,9 +1,16 @@
-<li class="list-row" id="notification_<%= notification.id %>">
+<li class="list-row <%= 'bg-base-300/30' if notification.status_new? %>" id="notification_<%= notification.id %>">
+  <%# New dot indicator %>
+  <% if notification.status_new? %>
+    <div class="flex items-center">
+      <div class="w-2 h-2 rounded-full bg-primary shrink-0" title="New"></div>
+    </div>
+  <% end %>
+
   <%# Icon col — reason %>
   <% reason = Notification::REASONS.find { |r| r.name.to_s == notification.reason } %>
   <div class="flex items-center">
     <div class="tooltip" data-tip="<%= reason&.display_name || 'Notification' %>">
-      <i class="<%= reason&.icon_class || 'fa-solid fa-bell' %> text-base-content/40 text-xl"></i>
+      <i class="<%= reason&.icon_class || 'fa-solid fa-bell' %> <%= notification.status_new? ? 'text-base-content/60' : 'text-base-content/30' %> text-xl"></i>
     </div>
   </div>
 
@@ -12,12 +19,13 @@
     <%# Title — prominent, external link if available %>
     <div class="pb-1">
       <% if notification.link.present? %>
-        <a href="<%= notification.link %>" target="_blank" rel="noopener noreferrer"
-           class="link link-hover font-semibold leading-snug line-clamp-1 text-base-content">
+        <a href="<%= visit_notification_path(notification) %>" target="_blank" rel="noopener noreferrer"
+           data-turbo-prefetch="false"
+           class="link link-hover font-semibold leading-snug line-clamp-1 <%= notification.status_new? ? 'text-base-content' : 'text-base-content/70' %>">
           <%= notification.title %>
         </a>
       <% else %>
-        <p class="font-semibold leading-snug line-clamp-1 text-base-content"><%= notification.title %></p>
+        <p class="font-semibold leading-snug line-clamp-1 <%= notification.status_new? ? 'text-base-content' : 'text-base-content/70' %>"><%= notification.title %></p>
       <% end %>
     </div>
 
@@ -50,12 +58,12 @@
     <% end %>
 
     <%# View email button %>
-    <%= link_to notification_path(notification), class: 'btn btn-ghost btn-sm btn-square', title: 'View email' do %>
-      <i class="bi bi-envelope text-base-content/60"></i>
+    <%= link_to notification_path(notification), data: { turbo_prefetch: false }, class: 'btn btn-ghost btn-sm btn-square', title: 'View email' do %>
+      <i class="bi bi-envelope <%= notification.status_new? ? 'text-base-content/60' : 'text-base-content/30' %>"></i>
     <% end %>
 
-    <%# Hide (checkmark) button %>
-    <%= button_to hide_notification_path(notification), method: :patch,
+    <%# Done (checkmark) button %>
+    <%= button_to done_notification_path(notification), method: :patch,
                   data: { turbo_stream: true },
                   class: 'btn btn-ghost btn-sm btn-square text-success',
                   title: 'Mark as done',

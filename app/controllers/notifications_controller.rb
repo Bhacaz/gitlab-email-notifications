@@ -4,13 +4,19 @@ class NotificationsController < ApplicationController
   before_action :set_notification
 
   def show
+    @notification.status_seen! unless @notification.status_seen? || @notification.status_done?
+
     mail = @notification.mail
     @html_body = mail&.html_part&.decoded
-    @show ||= mail&.body&.decoded
   end
 
-  def hide
-    @notification.update!(hidden: true)
+  def visit
+    @notification.status_seen! unless @notification.status_seen? || @notification.status_done?
+    redirect_to @notification.link, allow_other_host: true
+  end
+
+  def done
+    @notification.status_done!
 
     respond_to do |format|
       format.turbo_stream do

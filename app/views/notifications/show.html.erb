@@ -15,7 +15,7 @@
         <div class="min-w-0">
           <h1 class="text-lg font-bold leading-snug">
             <% if @notification.link.present? %>
-              <a href="<%= @notification.link %>" target="_blank" rel="noopener noreferrer"
+              <a href="<%= visit_notification_path(@notification) %>" target="_blank" rel="noopener noreferrer"
                  class="link link-primary">
                 <%= @notification.title %>
                 <i class="bi bi-box-arrow-up-right text-sm opacity-60"></i>
@@ -44,8 +44,8 @@
           <% end %>
         </div>
 
-        <%# Hide button %>
-        <%= button_to hide_notification_path(@notification), method: :patch,
+        <%# Done button %>
+        <%= button_to done_notification_path(@notification), method: :patch,
               form: { data: { turbo: false } },
               class: 'btn btn-success btn-sm',
               title: 'Mark as done' do %>

@@ -10,7 +10,8 @@ Rails.application.routes.draw do
 
   resources :notifications, only: %i[show] do
     member do
-      patch :hide
+      patch :done
+      get :visit
     end
   end
 
