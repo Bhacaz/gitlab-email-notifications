@@ -8,8 +8,11 @@
           all_count: @all_count,
           reasons: @reasons,
           repos: @repos,
+          new_count: @new_count,
+          seen_count: @seen_count,
           active_reason: @active_reason,
-          active_repo: @active_repo %>
+          active_repo: @active_repo,
+          active_status: @active_status %>
   </aside>
 
   <%# ── Notification list ── %>
@@ -17,6 +20,7 @@
     <%= render 'home/notification_list',
           notifications: @notifications,
           active_reason: @active_reason,
-          active_repo: @active_repo %>
+          active_repo: @active_repo,
+          active_status: @active_status %>
   </div>
 </div>

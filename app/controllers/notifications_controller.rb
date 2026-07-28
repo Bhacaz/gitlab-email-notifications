@@ -18,16 +18,20 @@ class NotificationsController < ApplicationController
   def done
     @notification.status_done!
 
+    active_reason = params[:reason]
+    active_repo   = params[:repo]
+    active_status = params[:status]
+
     respond_to do |format|
       format.turbo_stream do
         streams = [
           turbo_stream.replace(
             'notifications-sidebar',
             partial: 'home/sidebar_filters',
-            locals: Notification.sidebar_locals_for(current_user)
+            locals: Notification.sidebar_locals_for(current_user, active_reason: active_reason, active_repo: active_repo, active_status: active_status)
           )
         ]
-        streams << notification_list_streams
+        streams << notification_list_streams(active_reason, active_repo, active_status)
 
         render turbo_stream: streams
       end
@@ -41,13 +45,17 @@ class NotificationsController < ApplicationController
     @notification = current_user.notifications.find(params[:id])
   end
 
-  def notification_list_streams
+  def notification_list_streams(active_reason = nil, active_repo = nil, active_status = nil)
     remaining = current_user.notifications.visible
+    remaining = remaining.where(reason: active_reason) if active_reason.present?
+    remaining = remaining.where(repo: active_repo)     if active_repo.present?
+    remaining = remaining.where(status: active_status) if active_status.present? && Notification.statuses.key?(active_status)
+
     if remaining.none?
       turbo_stream.replace(
         'notification-list',
         partial: 'home/notification_list',
-        locals: { notifications: remaining, active_reason: nil, active_repo: nil }
+        locals: { notifications: remaining, active_reason: active_reason, active_repo: active_repo, active_status: active_status }
       )
     else
       turbo_stream.remove("notification_#{@notification.id}")

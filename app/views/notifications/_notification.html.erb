@@ -63,7 +63,7 @@
     <% end %>
 
     <%# Done (checkmark) button %>
-    <%= button_to done_notification_path(notification), method: :patch,
+    <%= button_to done_notification_path(notification, reason: params[:reason], repo: params[:repo], status: params[:status]), method: :patch,
                   data: { turbo_stream: true },
                   class: 'btn btn-ghost btn-sm btn-square text-success',
                   title: 'Mark as done',

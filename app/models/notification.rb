@@ -38,17 +38,21 @@ class Notification < ApplicationRecord
   after_create_commit :enqueue_push_notification
   after_update_commit :broadcast_seen, if: -> { status_previously_was == 'new' && status_seen? }
 
-  def self.sidebar_locals_for(user, active_reason: nil, active_repo: nil)
+  def self.sidebar_locals_for(user, active_reason: nil, active_repo: nil, active_status: nil)
     base = user.notifications.visible
     reason_counts = base.group(:reason).count
+    statuses = base.group(:status).count
     {
       all_count: base.count,
       reasons: REASONS
                .to_h { |r| [r.name.to_s, reason_counts.fetch(r.name.to_s, 0)] }
                .select { |_, c| c.positive? },
       repos: base.where.not(repo: nil).group(:repo).count.sort_by { |_, c| -c },
+      new_count: statuses.fetch('new', 0),
+      seen_count: statuses.fetch('seen', 0),
       active_reason: active_reason,
-      active_repo: active_repo
+      active_repo: active_repo,
+      active_status: active_status
     }
   end
 
@@ -80,6 +84,12 @@ class Notification < ApplicationRecord
       target: "notification_#{id}",
       partial: 'notifications/notification',
       locals: { notification: self }
+    )
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "notifications_#{user_id}",
+      target: 'notifications-sidebar',
+      partial: 'home/sidebar_filters',
+      locals: Notification.sidebar_locals_for(user)
     )
   end
 end

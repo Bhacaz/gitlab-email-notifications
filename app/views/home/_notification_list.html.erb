@@ -9,7 +9,7 @@
   <% else %>
     <div class="flex flex-col items-center justify-center py-24 text-base-content/30">
       <i class="bi bi-inbox text-5xl mb-4"></i>
-      <% if active_reason.present? || active_repo.present? %>
+      <% if active_reason.present? || active_repo.present? || active_status.present? %>
         <p class="text-lg font-semibold">No matches</p>
         <p class="text-sm mt-1">
           <%= link_to 'Clear filter', root_path, class: 'link link-hover text-base-content/40' %>

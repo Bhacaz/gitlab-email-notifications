@@ -3,11 +3,32 @@
   <%# All %>
   <li>
     <%= link_to root_path,
-          class: "menu-item flex justify-between #{'menu-active' if active_reason.nil? && active_repo.nil?}" do %>
+          class: "menu-item flex justify-between #{'menu-active' if active_reason.nil? && active_repo.nil? && active_status.nil?}" do %>
       <span>All</span>
       <% if all_count.positive? %>
         <span class="badge badge-sm badge-ghost"><%= all_count %></span>
       <% end %>
+    <% end %>
+  </li>
+
+  <%# Status section %>
+  <li class="menu-title mt-2">Status</li>
+  <li>
+    <%= link_to root_path(status: 'new'),
+          class: "flex justify-between #{'menu-active' if active_status == 'new'}" do %>
+      <span class="flex items-center gap-1.5">
+        <i class="bi bi-circle-fill text-primary text-xs"></i> New
+      </span>
+      <span class="badge badge-sm badge-ghost"><%= new_count %></span>
+    <% end %>
+  </li>
+  <li>
+    <%= link_to root_path(status: 'seen'),
+          class: "flex justify-between #{'menu-active' if active_status == 'seen'}" do %>
+      <span class="flex items-center gap-1.5">
+        <i class="bi bi-check2-circle text-xs"></i> Seen
+      </span>
+      <span class="badge badge-sm badge-ghost"><%= seen_count %></span>
     <% end %>
   </li>
 

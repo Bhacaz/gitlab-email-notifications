@@ -11,14 +11,19 @@ class HomeController < ApplicationController
                    .to_h { |r| [r.name.to_s, reason_counts.fetch(r.name.to_s, 0)] }
                    .select { |_, c| c.positive? }
     @repos       = base.where.not(repo: nil).group(:repo).count.sort_by { |_, c| -c }
+    statuses     = base.group(:status).count
+    @new_count   = statuses.fetch('new', 0)
+    @seen_count  = statuses.fetch('seen', 0)
 
     # Apply filters from params
     scope = base
     scope = scope.where(reason: params[:reason]) if params[:reason].present?
     scope = scope.where(repo: params[:repo])     if params[:repo].present?
+    scope = scope.where(status: params[:status]) if params[:status].present? && Notification.statuses.key?(params[:status])
 
     @notifications   = scope.order(created_at: :desc)
     @active_reason   = params[:reason]
     @active_repo     = params[:repo]
+    @active_status   = params[:status]
   end
 end
