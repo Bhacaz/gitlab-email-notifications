@@ -507,4 +507,24 @@ RSpec.describe NotificationsMailbox do
       expect(user.notifications.last.reason).to eq('mr_reassigned')
     end
   end
+
+  # ------------------------------------------------------------------
+  # MR merged
+  # Full handler specs: spec/mailboxes/notification_handlers/mr_merged_spec.rb
+  # ------------------------------------------------------------------
+
+  describe 'MR merged email' do
+    subject(:inbound_email) { receive_inbound_email_from_fixture('merged.eml') }
+
+    before { user }
+
+    it 'delivers the inbound email successfully' do
+      expect(inbound_email).to have_been_delivered
+    end
+
+    it 'creates a Notification with reason merged' do
+      expect { inbound_email }.to change { user.notifications.count }.by(1)
+      expect(user.notifications.last.reason).to eq('merged')
+    end
+  end
 end

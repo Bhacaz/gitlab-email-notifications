@@ -17,7 +17,8 @@ class Notification < ApplicationRecord
     Reason.new(:discussions_resolved, 8, 'Discussions Resolved', 'bi bi-check-all'),
     Reason.new(:reviewer_added, 9, 'Reviewer Added', 'bi bi-person-check'),
     Reason.new(:pushed_commits, 10, 'Pushed Commits', 'bi bi-git'),
-    Reason.new(:mr_reassigned, 11, 'MR Reassigned', 'bi bi-person-fill-gear')
+    Reason.new(:mr_reassigned, 11, 'MR Reassigned', 'bi bi-person-fill-gear'),
+    Reason.new(:merged, 12, 'Merged', 'bi bi-arrow-left-right')
   ].freeze
 
   enum :reason,
