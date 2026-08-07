@@ -4,7 +4,11 @@ class HomeController < ApplicationController
   def index
     base = current_user.notifications.visible
     build_sidebar(base)
-    @notifications = apply_filters(base).order(created_at: :desc)
+    @notifications = current_user.notifications.visible_filters(
+      reason: params[:reason],
+      repo: params[:repo],
+      status: params[:status]
+    ).order(created_at: :desc)
     @active_reason = params[:reason]
     @active_repo   = params[:repo]
     @active_status = params[:status]
@@ -22,15 +26,5 @@ class HomeController < ApplicationController
     statuses = base.group(:status).count
     @new_count = statuses.fetch('new', 0)
     @seen_count = statuses.fetch('seen', 0)
-  end
-
-  def apply_filters(base)
-    scope = base
-    scope = scope.where(reason: params[:reason]) if params[:reason].present?
-    scope = scope.where(repo: params[:repo])     if params[:repo].present?
-    if params[:status].present? && Notification.statuses.key?(params[:status])
-      scope = scope.where(status: params[:status])
-    end
-    scope
   end
 end

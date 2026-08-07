@@ -3,6 +3,13 @@
     <ul class="list bg-base-200 rounded-box shadow-sm">
       <li class="p-4 pb-2 text-xs text-base-content/50 tracking-widest uppercase font-semibold flex items-center justify-between">
         <span>Notifications</span>
+        <%= button_to mark_all_done_notifications_path(reason: active_reason, repo: active_repo, status: active_status),
+              method: :patch,
+              data: { turbo_stream: true },
+              form: { 'data-turbo-stream': true },
+              class: 'btn btn-ghost btn-xs text-xs normal-case link-hover' do %>
+          <i class="bi bi-check-all text-sm"></i> Mark all done
+        <% end %>
       </li>
       <%= render notifications %>
     </ul>

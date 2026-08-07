@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class NotificationsController < ApplicationController
-  before_action :set_notification
+  before_action :set_notification, except: :mark_all_done
 
   def show
     @notification.status_seen! unless @notification.status_seen? || @notification.status_done?
@@ -17,6 +17,19 @@ class NotificationsController < ApplicationController
 
   def done
     @notification.status_done!
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: done_turbo_streams }
+      format.html { redirect_to root_path }
+    end
+  end
+
+  def mark_all_done
+    current_user.notifications.visible_filters(
+      reason: params[:reason],
+      repo: params[:repo],
+      status: params[:status]
+    ).update_all(status: Notification.statuses[:done]) # rubocop:disable Rails/SkipsModelValidations -- bulk op, no callbacks wanted
+
     respond_to do |format|
       format.turbo_stream { render turbo_stream: done_turbo_streams }
       format.html { redirect_to root_path }
@@ -51,12 +64,11 @@ class NotificationsController < ApplicationController
   end
 
   def notification_list_streams(active_reason = nil, active_repo = nil, active_status = nil)
-    remaining = current_user.notifications.visible
-    remaining = remaining.where(reason: active_reason) if active_reason.present?
-    remaining = remaining.where(repo: active_repo)     if active_repo.present?
-    if active_status.present? && Notification.statuses.key?(active_status)
-      remaining = remaining.where(status: active_status)
-    end
+    remaining = current_user.notifications.visible_filters(
+      reason: active_reason,
+      repo: active_repo,
+      status: active_status
+    )
 
     if remaining.none?
       turbo_stream.replace(

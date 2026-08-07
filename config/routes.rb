@@ -13,6 +13,9 @@ Rails.application.routes.draw do
       patch :done
       get :visit
     end
+    collection do
+      patch :mark_all_done
+    end
   end
 
   resource :push_subscription, only: %i[create destroy]

@@ -28,6 +28,14 @@ class Notification < ApplicationRecord
   enum :status, { new: 0, seen: 1, done: 2 }, prefix: true
 
   scope :visible, -> { where.not(status: :done) }
+
+  def self.visible_filters(reason: nil, repo: nil, status: nil)
+    scope = visible
+    scope = scope.where(reason: reason) if reason.present?
+    scope = scope.where(repo: repo) if repo.present?
+    scope = scope.where(status: status) if status.present? && statuses.key?(status)
+    scope
+  end
   scope :new_status, -> { where(status: :new) }
   scope :old, -> { where(status: :seen) }
 
