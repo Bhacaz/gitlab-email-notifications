@@ -53,6 +53,7 @@ class NotificationsMailbox < ApplicationMailbox
         title: mail.subject,
         message_id: mail.message_id,
         repo: gitlab_project_path,
+        mr_title: extract_mr_title,
         unsubscribe_link: extract_unsubscribe_link,
         link: extract_gitlab_link
       }.merge(handler_attrs)
@@ -63,6 +64,19 @@ class NotificationsMailbox < ApplicationMailbox
   def notification_handler
     handler_class = NotificationHandlers::Base.descendants.find { |klass| klass.matches?(mail) }
     handler_class&.new(mail)
+  end
+
+  # Extracts the MR title from the email subject when it follows GitLab's
+  # "Re: <title> (!<iid>)" or "Re: <project> | <title> (!<iid>)" format.
+  # Returns nil when no MR reference is present (e.g. pipeline emails).
+  def extract_mr_title
+    subject = mail.subject.to_s.strip
+    return unless subject.match?(/\(!?\d+\)\s*\z/)
+
+    title = subject.sub(/\A(?:\[GitLab\]\s*)?Re:\s*/i, '')
+    title = title.sub(/\s*\(!?\d+\)\s*\z/, '')
+    title = title.split('|').last.strip if title.include?('|')
+    title.strip.presence
   end
 
   def extract_confirmation_link

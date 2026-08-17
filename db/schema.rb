@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_28_145845) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_124332) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "message_checksum", null: false
@@ -59,6 +59,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_28_145845) do
     t.datetime "created_at", null: false
     t.string "link"
     t.string "message_id", null: false
+    t.string "mr_title"
     t.integer "reason", limit: 1, default: 0
     t.string "repo"
     t.integer "status", default: 0, null: false
@@ -91,6 +92,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_28_145845) do
     t.index ["user_id", "endpoint"], name: "index_push_subscriptions_on_user_id_and_endpoint", unique: true
   end
 
+  create_table "solid_errors", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "exception_class", null: false
+    t.string "fingerprint", limit: 64, null: false
+    t.text "message", null: false
+    t.datetime "resolved_at"
+    t.text "severity", null: false
+    t.text "source"
+    t.datetime "updated_at", null: false
+    t.index ["fingerprint"], name: "index_solid_errors_on_fingerprint", unique: true
+    t.index ["resolved_at"], name: "index_solid_errors_on_resolved_at"
+  end
+
+  create_table "solid_errors_occurrences", force: :cascade do |t|
+    t.text "backtrace"
+    t.json "context"
+    t.datetime "created_at", null: false
+    t.integer "error_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["error_id"], name: "index_solid_errors_occurrences_on_error_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "avatar_url"
     t.datetime "created_at", null: false
@@ -110,4 +133,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_28_145845) do
   add_foreign_key "notifications", "users"
   add_foreign_key "onboardings", "users"
   add_foreign_key "push_subscriptions", "users"
+  add_foreign_key "solid_errors_occurrences", "solid_errors", column: "error_id"
 end

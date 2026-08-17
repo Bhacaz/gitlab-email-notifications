@@ -29,6 +29,13 @@
       <% end %>
     </div>
 
+    <%# MR title — shown when available %>
+    <% if notification.mr_title.present? %>
+      <div class="flex items-center gap-1.5 min-w-0 pb-1">
+        <span class="text-sm text-base-content/60 truncate"><%= notification.mr_title %></span>
+      </div>
+    <% end %>
+
     <%# Secondary line — repo / summary / timestamp %>
     <div class="flex flex-col gap-y-1 mt-0.5 text-xs text-base-content/40">
       <% if notification.summary.present? %>

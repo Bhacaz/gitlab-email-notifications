@@ -329,6 +329,34 @@ RSpec.describe NotificationsMailbox do
   end
 
   # ------------------------------------------------------------------
+  # MR title extraction
+  # ------------------------------------------------------------------
+
+  describe 'MR title extraction' do
+    before { user }
+
+    it 'extracts the MR title from a "Re: <title> (!<iid>)" subject' do
+      receive_inbound_email_from_fixture('mr_comment_1.eml')
+      expect(user.notifications.last.mr_title).to eq('My merge request title')
+    end
+
+    it 'extracts the MR title after the project prefix in a "Re: <project> | <title> (!<iid>)" subject' do
+      receive_inbound_email_from_fixture('other.eml')
+      expect(user.notifications.last.mr_title).to eq('My MR title')
+    end
+
+    it 'does not extract an MR title for pipeline emails' do
+      receive_inbound_email_from_fixture('pipeline_failed.eml')
+      expect(user.notifications.last.mr_title).to be_nil
+    end
+
+    it 'does not extract an MR title for non-MR emails' do
+      receive_inbound_email_from_fixture('unknown_sender.eml')
+      expect(user.notifications.last.mr_title).to be_nil
+    end
+  end
+
+  # ------------------------------------------------------------------
   # MR discussion (inline diff discussion on a file)
   # Full handler specs: spec/mailboxes/notification_handlers/mr_discussion_spec.rb
   # ------------------------------------------------------------------
