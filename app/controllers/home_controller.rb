@@ -2,8 +2,7 @@
 
 class HomeController < ApplicationController
   def index
-    base = current_user.notifications.visible
-    build_sidebar(base)
+    build_sidebar
     @notifications = current_user.notifications.visible_filters(
       reason: params[:reason],
       repo: params[:repo],
@@ -16,7 +15,7 @@ class HomeController < ApplicationController
 
   private
 
-  def build_sidebar(base)
+  def build_sidebar
     sidebar = Notification.sidebar_locals_for(
       current_user,
       active_reason: params[:reason],

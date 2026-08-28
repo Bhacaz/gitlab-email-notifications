@@ -18,8 +18,12 @@ RSpec.describe 'MuteRules' do
   before { sign_in_as(user) }
 
   describe 'GET /mute_rules' do
-    let!(:mute_rule) do
-      user.mute_rules.create!(rule_type: :from_identifier, value: '@group_123_bot_deadbeef', display_name: 'petal-jenkins-mr-token')
+    before do
+      user.mute_rules.create!(
+        rule_type: :from_identifier,
+        value: '@group_123_bot_deadbeef',
+        display_name: 'petal-jenkins-mr-token'
+      )
     end
 
     it 'renders the user mute rules page' do
@@ -43,7 +47,9 @@ RSpec.describe 'MuteRules' do
     it 'stores a display_name for from_identifier rules when it differs from value' do
       post notification_mute_rule_path(notification), params: { rule_type: 'from_identifier' }
 
-      expect(user.mute_rules.pick(:display_name, :value)).to eq(['petal-jenkins-mr-token commented', '@group_123_bot_deadbeef'])
+      expect(user.mute_rules.pick(:display_name, :value)).to eq(
+        ['petal-jenkins-mr-token commented', '@group_123_bot_deadbeef']
+      )
     end
 
     it 'silently deduplicates an existing rule' do

@@ -57,38 +57,33 @@ class MuteRulesController < ApplicationController
   end
 
   def notification_turbo_streams
-    active_reason = params[:reason]
-    active_repo = params[:repo]
-    active_status = params[:status]
-    remaining = current_user.notifications.visible_filters(
-      reason: active_reason,
-      repo: active_repo,
-      status: active_status
-    )
+    remaining = current_user.notifications.visible_filters(**notification_filters)
 
-    streams = [
+    [
       turbo_stream.replace(
         'notifications-sidebar',
         partial: 'home/sidebar_filters',
-        locals: Notification.sidebar_locals_for(
-          current_user,
-          active_reason: active_reason,
-          active_repo: active_repo,
-          active_status: active_status
-        )
-      )
+        locals: Notification.sidebar_locals_for(current_user, **active_filter_locals)
+      ),
+      notification_list_stream(remaining)
     ]
+  end
 
-    streams << if remaining.none?
-                 turbo_stream.replace(
-                   'notification-list',
-                   partial: 'home/notification_list',
-                   locals: { notifications: remaining, active_reason: active_reason, active_repo: active_repo,
-                             active_status: active_status }
-                 )
-               else
-                 turbo_stream.remove("notification_#{@notification.id}")
-               end
-    streams
+  def notification_filters
+    { reason: params[:reason], repo: params[:repo], status: params[:status] }
+  end
+
+  def active_filter_locals
+    { active_reason: params[:reason], active_repo: params[:repo], active_status: params[:status] }
+  end
+
+  def notification_list_stream(remaining)
+    return turbo_stream.remove("notification_#{@notification.id}") if remaining.any?
+
+    turbo_stream.replace(
+      'notification-list',
+      partial: 'home/notification_list',
+      locals: { notifications: remaining }.merge(active_filter_locals)
+    )
   end
 end

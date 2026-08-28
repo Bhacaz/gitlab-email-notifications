@@ -28,28 +28,38 @@ RSpec.describe MuteRule do
   end
 
   describe '#display_label' do
+    def build_mute_rule(**attrs)
+      described_class.new(**attrs)
+    end
+
+    def from_identifier_attrs
+      { rule_type: :from_identifier, value: '@bot', display_name: 'petal-jenkins-mr-token' }
+    end
+
     it 'formats merge requests for the sidebar' do
-      mute_rule = described_class.new(rule_type: :merge_request, value: 'foo/bar!42')
+      mute_rule = build_mute_rule(rule_type: :merge_request, value: 'foo/bar!42')
 
       expect(mute_rule.display_label).to eq('Merge Request: foo/bar !42')
     end
 
     it 'formats display_name and value together when display_name is present' do
-      mute_rule = described_class.new(rule_type: :from_identifier, value: '@bot', display_name: 'petal-jenkins-mr-token')
+      mute_rule = build_mute_rule(**from_identifier_attrs)
 
       expect(mute_rule.display_label).to eq('From: petal-jenkins-mr-token (@bot)')
     end
   end
 
   describe 'display_name normalization' do
-    it 'clears display_name when it matches value' do
-      mute_rule = described_class.create!(
+    subject(:mute_rule) do
+      described_class.create!(
         user: User.create!(uid: 'u2', email: 'u2@example.com'),
         rule_type: :repo,
         value: 'foo/bar',
         display_name: 'foo/bar'
       )
+    end
 
+    it 'clears display_name when it matches value' do
       expect(mute_rule.display_name).to be_nil
     end
   end

@@ -578,22 +578,25 @@ RSpec.describe NotificationsMailbox do
     end
 
     it 'drops notifications that match a from_identifier mute rule' do
-      user.mute_rules.create!(rule_type: :from_identifier, value: '@group_118601610_bot_56d58334b1f6a5e2cbc6a6bf05fec473')
+      user.mute_rules.create!(
+        rule_type: :from_identifier,
+        value: '@group_118601610_bot_56d58334b1f6a5e2cbc6a6bf05fec473'
+      )
 
-      expect { receive_rewritten_fixture('mute.eml') }.not_to change { user.notifications.count }
+      expect { receive_rewritten_fixture('mute.eml') }.not_to(change { user.notifications.count })
     end
 
     it 'drops notifications that match a repo mute rule' do
       user.mute_rules.create!(rule_type: :repo, value: 'petalhealth/internal-developer-platform/rails/products/rails')
 
-      expect { receive_rewritten_fixture('mute.eml') }.not_to change { user.notifications.count }
+      expect { receive_rewritten_fixture('mute.eml') }.not_to(change { user.notifications.count })
     end
 
     it 'drops notifications that match a merge_request mute rule' do
       user.mute_rules.create!(rule_type: :merge_request,
                               value: 'petalhealth/internal-developer-platform/rails/products/rails!17344')
 
-      expect { receive_rewritten_fixture('mute.eml') }.not_to change { user.notifications.count }
+      expect { receive_rewritten_fixture('mute.eml') }.not_to(change { user.notifications.count })
     end
   end
 end

@@ -28,7 +28,6 @@ class Notification < ApplicationRecord
   enum :status, { new: 0, seen: 1, done: 2 }, prefix: true
 
   scope :visible, -> { where.not(status: :done) }
-
   def self.visible_filters(reason: nil, repo: nil, status: nil)
     scope = visible
     scope = scope.where(reason: reason) if reason.present?
@@ -39,9 +38,7 @@ class Notification < ApplicationRecord
   scope :new_status, -> { where(status: :new) }
   scope :old, -> { where(status: :seen) }
 
-  def available_mute_rule_types
-    MuteRule::RULE_TYPES.keys.select { |rule_type| mute_rule_value(rule_type).present? }
-  end
+  def available_mute_rule_types = MuteRule::RULE_TYPES.keys.filter { |rule_type| mute_rule_value(rule_type).present? }
 
   def mute_rule_value(rule_type)
     case rule_type.to_s
@@ -55,15 +52,12 @@ class Notification < ApplicationRecord
   end
 
   def mute_rule_display_name(rule_type)
-    case rule_type.to_s
-    when 'from_identifier'
-      from_display_name || title.to_s.split(/\s+[\-\u2013]\s+/, 2).first.presence
-    end
+    return unless rule_type.to_s == 'from_identifier'
+
+    from_display_name || title.to_s.split(/\s+[-\u2013]\s+/, 2).first.presence
   end
 
-  def reason_display_name
-    REASONS.find { |r| r.name.to_s == reason }&.display_name || reason.to_s.humanize
-  end
+  def reason_display_name = REASONS.find { |r| r.name.to_s == reason }&.display_name || reason.to_s.humanize
 
   after_create_commit :broadcast_new_banner
   after_create_commit :enqueue_push_notification
@@ -87,15 +81,11 @@ class Notification < ApplicationRecord
     }
   end
 
-  def mail
-    ActionMailbox::InboundEmail.find_by(message_id: message_id)&.mail
-  end
+  def mail = ActionMailbox::InboundEmail.find_by(message_id: message_id)&.mail
 
   def from_display_name
-    display_name = mail&.[](:from)&.display_names&.first.to_s.strip
-    return if display_name.blank?
-
-    display_name.sub(/\s*\(@[^)]+\)\s*\z/, '').presence
+    display_name = mail&.[](:from)&.display_names.to_a.first.to_s.strip
+    display_name.sub(/\s*\(@[^)]+\)\s*\z/, '').presence if display_name.present?
   end
 
   private
