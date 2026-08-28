@@ -16,7 +16,9 @@ class MuteRulesController < ApplicationController
       return
     end
 
-    current_user.mute_rules.find_or_create_by!(rule_type: rule_type, value: value)
+    current_user.mute_rules.find_or_create_by!(rule_type: rule_type, value: value) do |mute_rule|
+      mute_rule.display_name = @notification.mute_rule_display_name(rule_type)
+    end
     @notification.status_done!
 
     respond_to do |format|

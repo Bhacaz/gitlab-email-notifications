@@ -54,6 +54,13 @@ class Notification < ApplicationRecord
     end
   end
 
+  def mute_rule_display_name(rule_type)
+    case rule_type.to_s
+    when 'from_identifier'
+      from_display_name || title.to_s.split(/\s+[\-\u2013]\s+/, 2).first.presence
+    end
+  end
+
   def reason_display_name
     REASONS.find { |r| r.name.to_s == reason }&.display_name || reason.to_s.humanize
   end
@@ -82,6 +89,13 @@ class Notification < ApplicationRecord
 
   def mail
     ActionMailbox::InboundEmail.find_by(message_id: message_id)&.mail
+  end
+
+  def from_display_name
+    display_name = mail&.[](:from)&.display_names&.first.to_s.strip
+    return if display_name.blank?
+
+    display_name.sub(/\s*\(@[^)]+\)\s*\z/, '').presence
   end
 
   private

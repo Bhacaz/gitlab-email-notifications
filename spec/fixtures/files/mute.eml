@@ -1,0 +1,37 @@
+Date: Wed, 08 Apr 2026 00:00:00 +0000
+From: "Group 118601610 Bot (@group_118601610_bot_56d58334b1f6a5e2cbc6a6bf05fec473)" <noreply@gitlab.example.com>
+To: abc123def456abc1@gitlab.example.com
+Message-ID: <mute-1@gitlab.example.com>
+Subject: Re: rails | Add mute flow (!17344)
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="--==_mimepart_mute"
+List-Unsubscribe: <https://gitlab.example.com/-/sent_notifications/mute123/unsubscribe>,<mailto:unsub@example.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+X-GitLab-Project-Path: petalhealth/internal-developer-platform/rails/products/rails
+X-GitLab-MergeRequest-IID: 17344
+
+----==_mimepart_mute
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+An update on merge request !17344.
+
+--
+Reply to this email directly or view it on GitLab: https://gitlab.example.com/petalhealth/internal-developer-platform/rails/products/rails/-/merge_requests/17344
+You're receiving this email because of your account on gitlab.example.com. Unsubscribe from this thread: https://gitlab.example.com/-/sent_notifications/mute123/unsubscribe
+
+----==_mimepart_mute
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>An update on merge request <a href="https://gitlab.example.com/petalhealth/internal-developer-platform/rails/products/rails/-/merge_requests/17344">!17344</a>.</p>
+<p>
+  Reply to this email directly or <a href="https://gitlab.example.com/petalhealth/internal-developer-platform/rails/products/rails/-/merge_requests/17344">view it on GitLab</a>.
+</p>
+</body>
+</html>
+
+----==_mimepart_mute--

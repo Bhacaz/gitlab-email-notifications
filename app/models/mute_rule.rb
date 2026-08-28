@@ -11,6 +11,8 @@ class MuteRule < ApplicationRecord
 
   enum :rule_type, RULE_TYPES.keys.index_with(&:to_s), validate: true
 
+  before_validation :normalize_display_name
+
   validates :value, presence: true,
                     uniqueness: { scope: %i[user_id rule_type], case_sensitive: true }
 
@@ -39,6 +41,8 @@ class MuteRule < ApplicationRecord
   end
 
   def display_value
+    return "#{display_name} (#{value})" if display_name.present?
+
     case rule_type.to_sym
     when :merge_request
       repo, mr_iid = value.split('!', 2)
@@ -46,5 +50,12 @@ class MuteRule < ApplicationRecord
     else
       value
     end
+  end
+
+  private
+
+  def normalize_display_name
+    self.display_name = display_name.to_s.strip.presence
+    self.display_name = nil if display_name == value
   end
 end
