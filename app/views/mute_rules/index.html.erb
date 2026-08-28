@@ -1,0 +1,18 @@
+<div class="w-full max-w-4xl mx-auto">
+  <div class="mb-4">
+    <%= link_to root_path, class: 'btn btn-ghost btn-sm' do %>
+      <i class="bi bi-arrow-left"></i> Back
+    <% end %>
+  </div>
+
+  <div class="card bg-base-200 shadow-sm">
+    <div class="card-body gap-4">
+      <div>
+        <h1 class="card-title text-2xl">Mute Rules</h1>
+        <p class="text-sm text-base-content/60">Notifications matching any of these rules will not be saved.</p>
+      </div>
+
+      <%= render 'list', mute_rules: @mute_rules %>
+    </div>
+  </div>
+</div>

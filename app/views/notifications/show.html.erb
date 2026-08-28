@@ -31,6 +31,16 @@
                 <i class="bi bi-git mr-1"></i><%= @notification.repo %>
               </span>
             <% end %>
+            <% if @notification.from_identifier.present? %>
+              <span class="badge badge-ghost badge-sm">
+                <i class="bi bi-robot mr-1"></i><%= @notification.from_identifier %>
+              </span>
+            <% end %>
+            <% if @notification.mr_iid.present? %>
+              <span class="badge badge-ghost badge-sm">
+                <i class="bi bi-git mr-1"></i>!<%= @notification.mr_iid %>
+              </span>
+            <% end %>
             <% if @notification.reason_pipeline_failed? %>
               <span class="badge badge-error badge-sm">Pipeline failed</span>
             <% end %>
@@ -44,13 +54,38 @@
           <% end %>
         </div>
 
-        <%# Done button %>
-        <%= button_to done_notification_path(@notification), method: :patch,
-              form: { data: { turbo: false } },
-              class: 'btn btn-success btn-sm',
-              title: 'Mark as done' do %>
-          <i class="bi bi-check-lg"></i>
-        <% end %>
+        <div class="flex items-center gap-2">
+          <% if @notification.available_mute_rule_types.any? %>
+            <div class="dropdown dropdown-end">
+              <div tabindex="0" role="button" class="btn btn-ghost btn-sm" title="Mute options"
+                   aria-label="Mute options for <%= @notification.title %>">
+                <i class="bi bi-bell-slash"></i>
+              </div>
+              <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-64 p-2 shadow-lg border border-base-300">
+                <% @notification.available_mute_rule_types.each do |rule_type| %>
+                  <li>
+                    <%= button_to notification_mute_rule_path(@notification, rule_type: rule_type),
+                          method: :post,
+                          form: { data: { turbo: false }, class: 'w-full' },
+                          class: 'flex w-full items-center gap-2 rounded-field px-3 py-2 text-left whitespace-nowrap hover:bg-base-200',
+                          aria: { label: "Mute #{MuteRule::RULE_TYPES.fetch(rule_type)} for #{@notification.title}" } do %>
+                      <i class="bi bi-bell-slash"></i>
+                      Mute <%= MuteRule::RULE_TYPES.fetch(rule_type) %>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <%# Done button %>
+          <%= button_to done_notification_path(@notification), method: :patch,
+                form: { data: { turbo: false } },
+                class: 'btn btn-success btn-sm',
+                title: 'Mark as done' do %>
+            <i class="bi bi-check-lg"></i>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

@@ -47,16 +47,21 @@ class NotificationsMailbox < ApplicationMailbox
   def process_notification_email(user)
     handler = notification_handler
     handler_attrs = handler ? handler.attributes.compact : {}
+    attrs = {
+      title: mail.subject,
+      message_id: mail.message_id,
+      repo: gitlab_project_path,
+      mr_title: extract_mr_title,
+      mr_iid: gitlab_merge_request_iid,
+      from_identifier: extract_from_identifier,
+      unsubscribe_link: extract_unsubscribe_link,
+      link: extract_gitlab_link
+    }.merge(handler_attrs).compact
+
+    return if MuteRule.muted?(user, attrs)
 
     user.notifications.create!(
-      {
-        title: mail.subject,
-        message_id: mail.message_id,
-        repo: gitlab_project_path,
-        mr_title: extract_mr_title,
-        unsubscribe_link: extract_unsubscribe_link,
-        link: extract_gitlab_link
-      }.merge(handler_attrs)
+      attrs
     )
   end
 
@@ -104,5 +109,14 @@ class NotificationsMailbox < ApplicationMailbox
 
   def gitlab_project_path
     mail.header['X-GitLab-Project-Path']&.value
+  end
+
+  def gitlab_merge_request_iid
+    mail.header['X-GitLab-MergeRequest-IID']&.value
+  end
+
+  def extract_from_identifier
+    display_name = mail[:from]&.display_names&.first.to_s
+    display_name[/\((@[^)]+)\)\s*\z/, 1]
   end
 end

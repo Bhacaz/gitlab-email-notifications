@@ -1,0 +1,28 @@
+<div id="mute-rules-list">
+  <% if mute_rules.any? %>
+    <ul class="list bg-base-100 rounded-box border border-base-300">
+      <% mute_rules.each do |mute_rule| %>
+        <li class="list-row flex items-center gap-3">
+          <div class="min-w-0 flex-1">
+            <p class="font-medium"><%= MuteRule::RULE_TYPES.fetch(mute_rule.rule_type.to_sym) %></p>
+            <p class="text-sm text-base-content/60 break-all"><%= mute_rule.display_value %></p>
+          </div>
+          <div class="ml-auto shrink-0">
+            <%= button_to mute_rule_path(mute_rule),
+                  method: :delete,
+                  data: { turbo_stream: true },
+                  form: { 'data-turbo-stream': true },
+                  class: 'btn btn-ghost btn-sm btn-square',
+                  aria: { label: "Remove #{mute_rule.display_label} mute rule" } do %>
+              <i class="bi bi-x-lg"></i>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="rounded-box border border-dashed border-base-300 bg-base-100 px-6 py-10 text-center text-base-content/50">
+      No mute rules yet.
+    </div>
+  <% end %>
+</div>

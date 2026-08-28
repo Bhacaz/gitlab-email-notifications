@@ -53,7 +53,31 @@
     </div>
   </div>
 
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-1">
+    <% if notification.available_mute_rule_types.any? %>
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-square" title="Mute options"
+             aria-label="Mute options for <%= notification.title %>">
+          <i class="bi bi-three-dots text-base-content/50"></i>
+        </div>
+        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-64 p-2 shadow-lg border border-base-300">
+          <% notification.available_mute_rule_types.each do |rule_type| %>
+            <li>
+              <%= button_to notification_mute_rule_path(notification, rule_type: rule_type, reason: params[:reason], repo: params[:repo], status: params[:status]),
+                    method: :post,
+                    data: { turbo_stream: true },
+                    form: { 'data-turbo-stream': true, class: 'w-full' },
+                    class: 'flex w-full items-center gap-2 rounded-field px-3 py-2 text-left whitespace-nowrap hover:bg-base-200',
+                    aria: { label: "Mute #{MuteRule::RULE_TYPES.fetch(rule_type)} for #{notification.title}" } do %>
+                <i class="bi bi-bell-slash"></i>
+                Mute <%= MuteRule::RULE_TYPES.fetch(rule_type) %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
     <%# Unsubscribe button — only shown when a link was parsed from the email %>
     <% if notification.unsubscribe_link.present? %>
       <%= link_to notification.unsubscribe_link,

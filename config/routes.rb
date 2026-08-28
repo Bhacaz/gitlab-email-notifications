@@ -13,10 +13,13 @@ Rails.application.routes.draw do
       patch :done
       get :visit
     end
+    resource :mute_rule, only: :create
     collection do
       patch :mark_all_done
     end
   end
+
+  resources :mute_rules, only: %i[index destroy]
 
   resource :push_subscription, only: %i[create destroy]
 
