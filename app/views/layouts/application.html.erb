@@ -94,6 +94,12 @@
                   </li>
                 <% end %>
                 <li>
+                  <%= link_to mute_rules_path do %>
+                    <i class="bi bi-bell-slash"></i>
+                    Mute rules
+                  <% end %>
+                </li>
+                <li>
                   <button type="button" class="w-full text-left" data-action="click->theme#toggle">
                     <i data-theme-target="icon" class="bi bi-moon-stars"></i>
                     Toggle theme

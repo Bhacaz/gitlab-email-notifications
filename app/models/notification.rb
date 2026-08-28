@@ -39,6 +39,21 @@ class Notification < ApplicationRecord
   scope :new_status, -> { where(status: :new) }
   scope :old, -> { where(status: :seen) }
 
+  def available_mute_rule_types
+    MuteRule::RULE_TYPES.keys.select { |rule_type| mute_rule_value(rule_type).present? }
+  end
+
+  def mute_rule_value(rule_type)
+    case rule_type.to_s
+    when 'from_identifier'
+      from_identifier.presence
+    when 'repo'
+      repo.presence
+    when 'merge_request'
+      repo.present? && mr_iid.present? ? "#{repo}!#{mr_iid}" : nil
+    end
+  end
+
   def reason_display_name
     REASONS.find { |r| r.name.to_s == reason }&.display_name || reason.to_s.humanize
   end
@@ -66,7 +81,7 @@ class Notification < ApplicationRecord
   end
 
   def mail
-    ActionMailbox::InboundEmail.find_by(message_id: message_id).mail
+    ActionMailbox::InboundEmail.find_by(message_id: message_id)&.mail
   end
 
   private

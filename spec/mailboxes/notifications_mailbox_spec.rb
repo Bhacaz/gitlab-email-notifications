@@ -30,6 +30,12 @@
 RSpec.describe NotificationsMailbox do
   include ActionMailbox::TestHelper
 
+  def receive_rewritten_fixture(name, to: user.notification_email)
+    raw = file_fixture(name).read
+    rewritten = raw.sub(/^To:.*$/i, "To: #{to}")
+    receive_inbound_email_from_source(rewritten)
+  end
+
   # ------------------------------------------------------------------
   # Shared setup
   # ------------------------------------------------------------------
@@ -553,6 +559,41 @@ RSpec.describe NotificationsMailbox do
     it 'creates a Notification with reason merged' do
       expect { inbound_email }.to change { user.notifications.count }.by(1)
       expect(user.notifications.last.reason).to eq('merged')
+    end
+  end
+
+  describe 'mute rules' do
+    before { user }
+
+    it 'stores the sender identifier when present in the From display name' do
+      receive_rewritten_fixture('example_mute.eml')
+
+      expect(user.notifications.last.from_identifier).to eq('@group_118601610_bot_56d58334b1f6a5e2cbc6a6bf05fec473')
+    end
+
+    it 'stores the merge request iid when present' do
+      receive_rewritten_fixture('example_mute.eml')
+
+      expect(user.notifications.last.mr_iid).to eq('17344')
+    end
+
+    it 'drops notifications that match a from_identifier mute rule' do
+      user.mute_rules.create!(rule_type: :from_identifier, value: '@group_118601610_bot_56d58334b1f6a5e2cbc6a6bf05fec473')
+
+      expect { receive_rewritten_fixture('example_mute.eml') }.not_to change { user.notifications.count }
+    end
+
+    it 'drops notifications that match a repo mute rule' do
+      user.mute_rules.create!(rule_type: :repo, value: 'petalhealth/internal-developer-platform/rails/products/rails')
+
+      expect { receive_rewritten_fixture('example_mute.eml') }.not_to change { user.notifications.count }
+    end
+
+    it 'drops notifications that match a merge_request mute rule' do
+      user.mute_rules.create!(rule_type: :merge_request,
+                              value: 'petalhealth/internal-developer-platform/rails/products/rails!17344')
+
+      expect { receive_rewritten_fixture('example_mute.eml') }.not_to change { user.notifications.count }
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_124332) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_28_182004) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "message_checksum", null: false
@@ -55,10 +55,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_124332) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "mute_rules", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "rule_type", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.string "value", null: false
+    t.index ["user_id", "rule_type", "value"], name: "index_mute_rules_on_user_id_and_rule_type_and_value", unique: true
+    t.index ["user_id"], name: "index_mute_rules_on_user_id"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "from_identifier"
     t.string "link"
     t.string "message_id", null: false
+    t.string "mr_iid"
     t.string "mr_title"
     t.integer "reason", limit: 1, default: 0
     t.string "repo"
@@ -68,7 +80,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_124332) do
     t.string "unsubscribe_link"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["from_identifier"], name: "index_notifications_on_from_identifier"
     t.index ["message_id"], name: "index_notifications_on_message_id"
+    t.index ["repo", "mr_iid"], name: "index_notifications_on_repo_and_mr_iid"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -130,6 +144,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_124332) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "mute_rules", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "onboardings", "users"
   add_foreign_key "push_subscriptions", "users"

@@ -13,9 +13,8 @@ RSpec.describe 'Notifications' do
   end
   let!(:fixed) do
     Notification.create!(user: user, message_id: SecureRandom.hex, reason: :pipeline_fixed, repo: 'foo/bar',
-                         title: 'c', status: :new)
+                          title: 'c', status: :new)
   end
-
   before { sign_in_as(user) }
 
   describe 'PATCH /notifications/mark_all_done' do
